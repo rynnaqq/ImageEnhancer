@@ -1,0 +1,48 @@
+{
+    "verifiedUtc":  "2026-10-02T10:41:20.2048135Z",
+    "release":  "https://github.com/rynnaqq/ImageEnhancer/releases/tag/v0.2.0",
+    "releaseId":  401728614,
+    "tag":  "v0.2.0",
+    "publishedAt":  "2026-10-02T10:40:15Z",
+    "draft":  false,
+    "prerelease":  true,
+    "codeCommit":  "d8f86cbcbcd38438d782fd5fe39135865a0258c1",
+    "remoteTagCommitMatches":  true,
+    "apk":  {
+                "url":  "https://github.com/rynnaqq/ImageEnhancer/releases/download/v0.2.0/LocalPhotoEnhancer-v0.2.0.apk",
+                "assetId":  605374276,
+                "bytes":  497183170,
+                "sha256":  "356beabcefeda72f6b39690120b444cd15200091188cde400836b8a30285409e",
+                "githubDigestMatches":  true,
+                "publicContentLengthMatches":  true
+            },
+    "checksum":  {
+                     "url":  "https://github.com/rynnaqq/ImageEnhancer/releases/download/v0.2.0/SHA256SUMS.txt",
+                     "assetId":  605383430,
+                     "bytes":  96,
+                     "publicContentMatches":  true
+                 },
+    "signingCertificateSHA256":  "921853fe2ce9460e7d4304d8f4e146ad045c81b8144e111fc30c50a22da337d0",
+    "v0_1_0Preserved":  true,
+    "baselineRelease":  {
+                            "id":  401487463,
+                            "tag":  "v0.1.0",
+                            "publishedAt":  "2026-10-02T02:04:45Z",
+                            "assets":  [
+                                           {
+                                               "id":  604582104,
+                                               "name":  "LocalPhotoEnhancer-v0.1.0.apk",
+                                               "bytes":  138265329,
+                                               "digest":  "sha256:ab1f3e3f5cd3fc3a78d99126ec508249e30b62065511827fe54acebfa8acc781",
+                                               "unchanged":  true
+                                           },
+                                           {
+                                               "id":  604583147,
+                                               "name":  "SHA256SUMS.txt",
+                                               "bytes":  96,
+                                               "digest":  "sha256:ffb8b644e8a515de4ce1bf754aef27bfb469463122ec8bca6cfda898d2484526",
+                                               "unchanged":  true
+                                           }
+                                       ]
+                        }
+}

@@ -104,6 +104,14 @@
   UI it enabled all four restoration tools, accepted a painted reconstruction mask and
   processed a 256 px source to a completed 512×512 result. Final source, UI and gallery
   proof is archived under `docs/evidence/restoration-v0.2.0/`.
-- GitHub publication remains pending. Physical ARM-device photo quality, thermal,
-  huge-input and broader device-matrix qualification remain open, as do reference
-  fusion and TIFF. The v0.1.0 evidence and public release are unchanged.
+- Public preview v0.2.0, GitHub release ID `401728614`, was published at
+  `2026-10-02T10:40:15Z`. The unauthenticated public API reports the verified SHA-256,
+  public `HEAD` reports the exact 497,183,170-byte content length, and the downloaded
+  96-byte `SHA256SUMS.txt` matches the expected content byte-for-byte. The remote
+  annotated tag
+  peels to code commit `d8f86cbcbcd38438d782fd5fe39135865a0258c1`. Publication
+  evidence is archived in `docs/evidence/restoration-v0.2.0/public-release.json`.
+- The earlier v0.1.0 release (ID `401487463`) and both original asset IDs, sizes and
+  hashes remain unchanged. Physical ARM-device photo quality, thermal, huge-input
+  and broader device-matrix qualification remain open, as do reference fusion and
+  TIFF.

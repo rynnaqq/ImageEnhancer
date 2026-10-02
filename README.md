@@ -9,9 +9,10 @@ still a preview: physical-photo quality and device qualification, learned refere
 fusion, TIFF and streamed full-resolution processing remain release gates in
 [the dependency document](docs/TECHNICAL_DEPENDENCIES.md).
 
-The v0.2.0 release page is [GitHub Releases](https://github.com/rynnaqq/ImageEnhancer/releases/tag/v0.2.0).
-Publication is still pending while the final evidence and release assets are being
-archived. The
+The public v0.2.0 preview is available from the
+[release page](https://github.com/rynnaqq/ImageEnhancer/releases/tag/v0.2.0), with a
+[direct APK download](https://github.com/rynnaqq/ImageEnhancer/releases/download/v0.2.0/LocalPhotoEnhancer-v0.2.0.apk).
+The
 [v0.1.0 release](https://github.com/rynnaqq/ImageEnhancer/releases/tag/v0.1.0),
 [release notes](docs/releases/v0.1.0.md) and validation evidence remain archived.
 
@@ -139,9 +140,17 @@ On the offline owned AVD, the signed app prepared all five models through real n
 probes, showed every model Ready, enabled all four restoration tools, accepted a
 painted mask and completed a 256 px source as a 512×512 result through native UI.
 
-GitHub publication remains pending. Physical ARM-device photo quality, thermal and
-huge-input qualification remain open, along with reference fusion and TIFF. The
-archived v0.1.0 record retains its 10 core and 22 offline Android test results.
+The public preview release (GitHub release ID `401728614`) was published on
+2026-10-02 at 10:40:15 UTC. Its unauthenticated public API metadata reports the
+signed SHA-256, public `HEAD` reports the exact 497,183,170-byte content length, and
+the downloaded 96-byte `SHA256SUMS.txt` matches the expected content byte-for-byte.
+The annotated `v0.2.0` tag peels to code commit
+`d8f86cbcbcd38438d782fd5fe39135865a0258c1`. See the archived
+[public-release evidence](docs/evidence/restoration-v0.2.0/public-release.json).
+
+Physical ARM-device photo quality, thermal and huge-input qualification remain open,
+along with reference fusion and TIFF. The archived v0.1.0 release (ID `401487463`)
+retains its original assets, sizes, hashes, 10 core tests and 22 offline Android tests.
 
 ## Source organization
 

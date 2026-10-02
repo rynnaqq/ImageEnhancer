@@ -21,7 +21,7 @@ professional restoration product.
 | Vendor GPU/NPU paths | Actual CPU/XNNPACK/NNAPI probes, numerical validation and CPU fallback. No universal acceleration promise. | Add QNN/vendor providers only for supported chipsets and distributable native SDKs; benchmark each model/provider on actual devices, test driver failures and memory/thermal pressure. Persist provider compatibility with OS/model/driver identifiers. |
 | Quality/Balanced/Fast variants | All three profiles exist and alter work/tile policy. The same task-specific graphs are used by each profile. | Benchmark and package alternate quality/balanced/fallback weights only when measured quality and resource results justify them. Selection must remain local and never trigger a runtime download. |
 | Storage, memory and cancellation during model initialization | Every model or model part is bundled, length/hash checked and assembled privately. Advanced CPU sessions are serialized. DDColor and LaMa require roughly 1.2 GiB of available memory and fail safely below their declared headroom. | Exercise low-storage, cancellation, OS pressure and thermal interruption during every large extraction, probe and inference boundary on physical devices. Consider progress/checkpoints for long first initialization. |
-| Device-class and quality release qualification | Twenty core tests, final debug/test assemblies, both lint checks (zero errors, 30 warnings), model/hash/license/no-network audits and 42 offline API 35 x86_64 Android tests pass. The optimized signed release passed v3 signature, 16 KiB alignment, same-key v0.1.0 upgrade, installed-hash/non-debuggable checks, all-five-model native probes and an all-four-tools signed-app workflow. Publication is pending. | Run the PRD §46–47 licensed photo suite on physical ARM low/mid/high devices: airplane mode, screen off, minimize, OS kill, service timeout, full queue, thermal events, low RAM/disk, accelerator paths, huge inputs and identity checks. Review actual before/after images; successful x86_64 graph execution is insufficient. |
+| Device-class and quality release qualification | Twenty core tests, final debug/test assemblies, both lint checks (zero errors, 30 warnings), model/hash/license/no-network audits and 42 offline API 35 x86_64 Android tests pass. The optimized signed release passed v3 signature, 16 KiB alignment, same-key v0.1.0 upgrade, installed-hash/non-debuggable checks, all-five-model native probes and an all-four-tools signed-app workflow. The public v0.2.0 preview and its checksums are independently retrievable and match the verified artifact. | Run the PRD §46–47 licensed photo suite on physical ARM low/mid/high devices: airplane mode, screen off, minimize, OS kill, service timeout, full queue, thermal events, low RAM/disk, accelerator paths, huge inputs and identity checks. Review actual before/after images; successful x86_64 graph execution is insufficient. |
 
 ## Evidence and sources
 
@@ -44,7 +44,7 @@ professional restoration product.
 Model downloads are permitted during development to build the installed package.
 There is no network or download code in the installed application.
 
-Current v0.2.0 execution evidence and pending release checks are tracked in
+Current v0.2.0 execution and release evidence is tracked in
 [RESTORATION_VALIDATION.md](RESTORATION_VALIDATION.md). The complete 42-test Android
 run is archived in
 [android-tests.txt](evidence/restoration-v0.2.0/android-tests.txt). The v0.1.0
@@ -57,7 +57,17 @@ It retains certificate SHA-256
 `921853fe2ce9460e7d4304d8f4e146ad045c81b8144e111fc30c50a22da337d0`,
 uses APK Signature Scheme v3 and passes 16 KiB zip-alignment verification. The signed
 package passed the same five-model/full-part hash, license and no-network-permission
-audit as source. GitHub publication remains pending.
+audit as source.
+
+The public preview is [GitHub release v0.2.0](https://github.com/rynnaqq/ImageEnhancer/releases/tag/v0.2.0),
+release ID `401728614`, published `2026-10-02T10:40:15Z`. The unauthenticated public
+API reports the verified SHA-256, public `HEAD` reports the exact 497,183,170-byte
+content length, and the downloaded 96-byte `SHA256SUMS.txt` matches the expected
+content byte-for-byte. The remote annotated tag peels to code commit
+`d8f86cbcbcd38438d782fd5fe39135865a0258c1`. These checks are archived in
+[`public-release.json`](evidence/restoration-v0.2.0/public-release.json). The earlier
+v0.1.0 release (ID `401487463`) and both original assets, sizes and hashes were
+preserved.
 
 ## Bundled graph contract
 

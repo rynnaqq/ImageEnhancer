@@ -140,7 +140,18 @@ Evidence: [release build/lint](evidence/restoration-v0.2.0/release-build-lint.tx
 [completed result](evidence/restoration-v0.2.0/signed-completed-result.png), and
 [gallery image](evidence/restoration-v0.2.0/signed-gallery-result.jpg).
 
-GitHub publication and public asset digest verification remain pending.
+## Public distribution
+
+The [v0.2.0 preview release](https://github.com/rynnaqq/ImageEnhancer/releases/tag/v0.2.0)
+was published at **2026-10-02 10:40:15 UTC**. The remote annotated tag resolves to
+code commit `d8f86cbcbcd38438d782fd5fe39135865a0258c1`.
+
+Unauthenticated public verification passed: GitHub's APK digest equals the signed
+local SHA-256 above, the public download's final Content-Length is 497,183,170
+bytes, and the downloaded `SHA256SUMS.txt` is byte-for-byte equal to the local
+96-byte checksum file. The existing v0.1.0 release and both original assets retain
+their IDs, sizes and recorded APK digest. The complete public verification is
+archived in [public-release.json](evidence/restoration-v0.2.0/public-release.json).
 
 ## Preview limits
 
