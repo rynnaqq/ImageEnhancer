@@ -14,6 +14,9 @@ enum class Stage {
     DEBLUR,
     LIGHTING,
     COLOR,
+    REPAIR,
+    COLORIZE,
+    FACE_RESTORE,
     SUPER_RESOLUTION,
     REFINE,
     EXPORT,
@@ -121,12 +124,68 @@ data class OutputSettings(
     fun normalized(): OutputSettings = copy(quality = quality.coerceIn(1, 100))
 }
 
+data class RepairPoint(
+    val x: Float,
+    val y: Float,
+)
+
+data class RepairStroke(
+    val points: List<RepairPoint>,
+    val radius: Float = 0.025f,
+    val erase: Boolean = false,
+)
+
+data class RestorationSettings(
+    val faceStrength: Float = 0f,
+    val colorize: Boolean = false,
+    val colorStrength: Float = 70f,
+    val scratchRepair: Boolean = false,
+    val repairStrength: Float = 100f,
+    val maskStrokes: List<RepairStroke> = emptyList(),
+) {
+    fun normalized(): RestorationSettings {
+        var remainingPoints = MAX_REPAIR_POINTS
+        val normalizedStrokes = buildList {
+            for (stroke in maskStrokes) {
+                if (size >= MAX_REPAIR_STROKES || remainingPoints == 0) break
+                val points = stroke.points.asSequence()
+                    .filter { it.x.isFinite() && it.y.isFinite() }
+                    .take(minOf(MAX_REPAIR_POINTS_PER_STROKE, remainingPoints))
+                    .map { RepairPoint(it.x.coerceIn(0f, 1f), it.y.coerceIn(0f, 1f)) }
+                    .toList()
+                if (points.isEmpty()) continue
+                add(
+                    RepairStroke(
+                        points = points,
+                        radius = stroke.radius.finiteClamped(0.002f, 0.15f, 0.025f),
+                        erase = stroke.erase,
+                    ),
+                )
+                remainingPoints -= points.size
+            }
+        }
+        return copy(
+            faceStrength = faceStrength.finiteClamped(0f, 100f, 0f),
+            colorStrength = colorStrength.finiteClamped(0f, 100f, 70f),
+            repairStrength = repairStrength.finiteClamped(0f, 100f, 100f),
+            maskStrokes = normalizedStrokes,
+        )
+    }
+
+    private companion object {
+        const val MAX_REPAIR_STROKES = 256
+        const val MAX_REPAIR_POINTS_PER_STROKE = 2_048
+        const val MAX_REPAIR_POINTS = 8_192
+    }
+}
+
 data class EnhanceSettings(
     val auto: Boolean = true,
     val profile: Profile = Profile.QUALITY,
     val adjustments: Adjustments = Adjustments(),
     val transform: TransformSettings = TransformSettings(),
     val output: OutputSettings = OutputSettings(),
+    val restoration: RestorationSettings = RestorationSettings(),
 )
 
 data class ImageMetrics(

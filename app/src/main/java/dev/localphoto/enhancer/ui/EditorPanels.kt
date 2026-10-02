@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import dev.localphoto.core.*
 import dev.localphoto.enhancer.R
 import dev.localphoto.enhancer.ai.DeviceCapabilities
+import dev.localphoto.enhancer.data.ImageFiles
 import kotlin.math.roundToInt
 
 @Composable fun SectionTitle(@StringRes title: Int) {
@@ -168,29 +169,71 @@ import kotlin.math.roundToInt
     }
 }
 
-@Composable fun RestorationDependencies() {
-    var explanation by remember { mutableStateOf<Int?>(null) }
+@Composable fun RestorationControls(settings: EnhanceSettings, onChange: (EnhanceSettings) -> Unit,
+    sourcePath: String?, files: ImageFiles) {
+    val restoration = settings.restoration
+    fun update(value: RestorationSettings) = onChange(settings.copy(restoration = value.normalized()))
     SectionTitle(R.string.restoration_tools)
-    Text(stringResource(R.string.dependency_explanation), style = MaterialTheme.typography.bodySmall,
+    Text(stringResource(R.string.restoration_description), style = MaterialTheme.typography.bodySmall,
         color = MaterialTheme.colorScheme.onSurfaceVariant)
-    listOf(R.string.old_photo to R.string.old_photo_dependency, R.string.face to R.string.face_dependency,
-        R.string.colorization to R.string.colorization_dependency, R.string.reconstruction to R.string.reconstruction_dependency).forEach { (title, body) ->
-        OutlinedCard(modifier = Modifier.fillMaxWidth(), onClick = { explanation = body }) {
-            Row(Modifier.padding(14.dp), verticalAlignment = Alignment.CenterVertically) {
-                Icon(Icons.Outlined.Lock, null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
-                Spacer(Modifier.width(12.dp))
-                Column(Modifier.weight(1f)) {
-                    Text(stringResource(title), style = MaterialTheme.typography.bodyMedium)
-                    Text(stringResource(R.string.model_dependency), style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant)
-                }
-                Icon(Icons.Outlined.Info, stringResource(R.string.not_available))
-            }
+
+    ToolCategory(R.string.old_photo, initiallyExpanded = restoration.scratchRepair,
+        reset = { update(restoration.copy(scratchRepair = false, repairStrength = 100f)) }) {
+        val toggleDescription = stringResource(R.string.enable_scratch_repair)
+        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+            Text(stringResource(R.string.automatic_scratch_repair), Modifier.weight(1f))
+            Switch(restoration.scratchRepair, onCheckedChange = { update(restoration.copy(scratchRepair = it)) },
+                modifier = Modifier.semantics { contentDescription = toggleDescription })
+        }
+        Text(stringResource(R.string.old_photo_model_description), style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant)
+        if (restoration.scratchRepair) AdjustmentSlider(R.string.repair_strength, restoration.repairStrength, 0f..100f) {
+            update(restoration.copy(repairStrength = it))
         }
     }
-    explanation?.let { body -> AlertDialog(onDismissRequest = { explanation = null },
-        title = { Text(stringResource(R.string.not_available)) }, text = { Text(stringResource(body)) },
-        confirmButton = { TextButton(onClick = { explanation = null }) { Text(stringResource(R.string.close)) } }) }
+
+    ToolCategory(R.string.face, initiallyExpanded = restoration.faceStrength > 0f,
+        reset = { update(restoration.copy(faceStrength = 0f)) }) {
+        val toggleDescription = stringResource(R.string.enable_face_restoration)
+        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+            Text(stringResource(R.string.face_restoration_toggle), Modifier.weight(1f))
+            Switch(restoration.faceStrength > 0f, onCheckedChange = {
+                update(restoration.copy(faceStrength = if (it) DEFAULT_FACE_STRENGTH else 0f))
+            }, modifier = Modifier.semantics { contentDescription = toggleDescription })
+        }
+        Text(stringResource(R.string.face_model_description), style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant)
+        if (restoration.faceStrength > 0f) AdjustmentSlider(R.string.face_strength, restoration.faceStrength, 0f..100f) {
+            update(restoration.copy(faceStrength = it))
+        }
+    }
+
+    ToolCategory(R.string.colorization, initiallyExpanded = restoration.colorize,
+        reset = { update(restoration.copy(colorize = false, colorStrength = 70f)) }) {
+        val toggleDescription = stringResource(R.string.enable_colorization)
+        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+            Text(stringResource(R.string.colorization_toggle), Modifier.weight(1f))
+            Switch(restoration.colorize, onCheckedChange = { update(restoration.copy(colorize = it)) },
+                modifier = Modifier.semantics { contentDescription = toggleDescription })
+        }
+        Text(stringResource(R.string.colorization_model_description), style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant)
+        if (restoration.colorize) AdjustmentSlider(R.string.color_strength, restoration.colorStrength, 0f..100f) {
+            update(restoration.copy(colorStrength = it))
+        }
+    }
+
+    ToolCategory(R.string.reconstruction, initiallyExpanded = restoration.maskStrokes.any { !it.erase },
+        reset = { update(restoration.copy(maskStrokes = emptyList(), repairStrength = 100f)) }) {
+        Text(stringResource(R.string.reconstruction_description), style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant)
+        RepairMaskEditor(sourcePath, files, settings.transform, restoration.maskStrokes,
+            onAddStroke = { stroke -> update(restoration.copy(maskStrokes = restoration.maskStrokes + stroke)) },
+            onClear = { update(restoration.copy(maskStrokes = emptyList())) })
+        AdjustmentSlider(R.string.repair_strength, restoration.repairStrength, 0f..100f) {
+            update(restoration.copy(repairStrength = it))
+        }
+    }
 }
 
 @Composable fun Notice(text: String) {
@@ -198,3 +241,5 @@ import kotlin.math.roundToInt
         Text(text, Modifier.padding(12.dp), style = MaterialTheme.typography.bodySmall)
     }
 }
+
+private const val DEFAULT_FACE_STRENGTH = 70f

@@ -7,6 +7,7 @@ object PipelinePlanner {
     fun plan(metrics: ImageMetrics, settings: EnhanceSettings): PipelinePlan {
         require(metrics.width > 0 && metrics.height > 0) { "Image dimensions must be positive" }
         val base = settings.adjustments.normalized()
+        val restoration = settings.restoration.normalized()
         val detected = detect(metrics)
         val adjustments = if (settings.auto) automaticAdjustments(metrics, base, detected) else base
         val stages = buildList {
@@ -16,6 +17,9 @@ object PipelinePlanner {
             if (adjustments.deblur > 0f) add(Stage.DEBLUR)
             if (hasLightingAdjustment(adjustments)) add(Stage.LIGHTING)
             if (hasColorAdjustment(adjustments)) add(Stage.COLOR)
+            if (restoration.scratchRepair || restoration.maskStrokes.any { !it.erase }) add(Stage.REPAIR)
+            if (restoration.colorize && restoration.colorStrength > 0f) add(Stage.COLORIZE)
+            if (restoration.faceStrength > 0f) add(Stage.FACE_RESTORE)
             if (adjustments.scale > 1) add(Stage.SUPER_RESOLUTION)
             if (adjustments.sharpen > 0f) add(Stage.REFINE)
             add(Stage.EXPORT)
@@ -92,7 +96,6 @@ object PipelinePlanner {
                 fadedColor = 0f,
             )
         }
-        // Monochrome detection is reported, but colorization has no bundled implementation.
         return result.normalized()
     }
 

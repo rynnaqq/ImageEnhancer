@@ -1,0 +1,36 @@
+{
+  "model": "face-swinir.onnx",
+  "sha256": "c9b93e139b7d01e22041f8884cef6b80ff67fbc0f16f7fef21b0dfacc55ce041",
+  "runtime": "1.30.0",
+  "provider": [
+    "CPUExecutionProvider"
+  ],
+  "threads": 2,
+  "session_seconds": 3.9339714999987336,
+  "run_seconds": [
+    4.843633999998929,
+    4.744165900001462
+  ],
+  "peak_process_rss_bytes": 723996672,
+  "inputs": {
+    "input": [
+      1,
+      3,
+      96,
+      96
+    ]
+  },
+  "outputs": [
+    {
+      "shape": [
+        1,
+        3,
+        384,
+        384
+      ],
+      "minimum": -0.09956365823745728,
+      "maximum": 1.2130258083343506,
+      "mean": 0.519981324672699
+    }
+  ]
+}

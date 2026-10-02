@@ -1,0 +1,6 @@
+Verified espcn-x3: 240078 bytes, SHA-256 85f36ff88cc504a24af5e0602148bc56a8aa09a58eca8c0da2756f3e8186035e
+Verified yunet: 229738 bytes, SHA-256 ebafce4e3c118d6554634be5c27ab333b4c047a9a8c3faf1d7cf93101c22f0f0
+Verified face-swinir: 57472188 bytes, SHA-256 c9b93e139b7d01e22041f8884cef6b80ff67fbc0f16f7fef21b0dfacc55ce041
+Verified color-ddcolor: 135444402 bytes, SHA-256 2653da00dc15e54a45e5200b61dbf82ee9ceaf56b02bb9b9657569ac775e82e6
+Verified repair-lama: 208044816 bytes, SHA-256 1faef5301d78db7dda502fe59966957ec4b79dd64e16f03ed96913c7a4eb68d6
+All enhancement/restoration models and licenses are bundled.

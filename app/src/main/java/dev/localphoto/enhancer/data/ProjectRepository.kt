@@ -89,7 +89,8 @@ class ProjectRepository(val dao: ProjectDao, val files: ImageFiles) {
         dao.update(project.copy(status = ProjectStatus.DRAFT.name, basePath = project.outputPath,
             baseWidth = project.outputWidth, baseHeight = project.outputHeight, outputPath = null, galleryUri = null,
             settingsJson = SettingsCodec.encode(project.settings.copy(auto = false,
-                adjustments = Adjustments(scale = 1, sharpen = 0f), transform = TransformSettings())),
+                adjustments = Adjustments(scale = 1, sharpen = 0f), transform = TransformSettings(),
+                restoration = RestorationSettings())),
             checkpointPath = null, checkpointStage = -1, planJson = "", progress = 0f, errorCode = null,
             updatedAt = System.currentTimeMillis()))
     }

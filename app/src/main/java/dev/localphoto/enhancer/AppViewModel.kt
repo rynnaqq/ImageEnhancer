@@ -31,6 +31,7 @@ class AppViewModel(application: Application, private val saved: SavedStateHandle
     val metrics = MutableStateFlow<ImageMetrics?>(null)
     val capabilities = MutableStateFlow(DeviceCapabilityDetector.detect(application))
     val modelState = graph.models.state
+    val modelCatalog = graph.models.catalog
     private var analysisJob: Job? = null
 
     init { selectedId.value?.let { openProject(it, showEditor = false) } }
@@ -157,9 +158,10 @@ class AppViewModel(application: Application, private val saved: SavedStateHandle
     }
     fun updateDefaults(settings: EnhanceSettings) { viewModelScope.launch { graph.settings.save(settings) } }
     fun initializeModels() {
+        if (busy.value) return
         viewModelScope.launch {
             busy.value = true
-            try { withContext(Dispatchers.Default) { graph.models.openSession().close() }; capabilities.value = DeviceCapabilityDetector.detect(getApplication()) }
+            try { withContext(Dispatchers.Default) { graph.models.initializeAll() }; capabilities.value = DeviceCapabilityDetector.detect(getApplication()) }
             catch (e: Exception) { message.value = (e as? PhotoFailure)?.code ?: "model_init" }
             finally { busy.value = false }
         }

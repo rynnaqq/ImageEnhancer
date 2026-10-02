@@ -7,8 +7,11 @@ import ai.onnxruntime.providers.NNAPIFlags
 import dev.localphoto.enhancer.data.PhotoFailure
 import dev.localphoto.enhancer.BuildConfig
 import dev.localphoto.enhancer.processing.ProcessingControl
+import dev.localphoto.enhancer.processing.ProcessingStopped
+import dev.localphoto.core.NativeModelGate
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import org.json.JSONObject
 import java.io.File
 import java.nio.FloatBuffer
@@ -21,6 +24,9 @@ import kotlin.math.min
 data class ModelState(val ready: Boolean = false, val requiredBytes: Long = 240078,
     val backend: String = "CPU", val probeMilliseconds: Double? = null, val error: String? = null)
 
+data class ModelStatus(val id: String, val label: String, val bytes: Long,
+    val ready: Boolean = false, val preparing: Boolean = false, val error: String? = null)
+
 class ModelManager(private val context: Context) {
     val environment: OrtEnvironment = OrtEnvironment.getEnvironment().also { environment ->
         // The application is offline and emits no runtime analytics. Some vendor builds may
@@ -29,32 +35,61 @@ class ModelManager(private val context: Context) {
     }
     private val mutableState = MutableStateFlow(ModelState())
     val state = mutableState.asStateFlow()
-    private var verifiedFile: File? = null
+    private val manifest by lazy {
+        JSONObject(context.assets.open("models/manifest.json").bufferedReader().use { it.readText() })
+    }
+    private val entries by lazy {
+        manifest.getJSONArray("models").let { models ->
+            (0 until models.length()).associate { index ->
+                val model = models.getJSONObject(index)
+                model.getString("id") to model
+            }
+        }
+    }
+    private val mutableCatalog = MutableStateFlow(entries.mapValues { (id, model) ->
+        ModelStatus(id, model.optString("label", id), model.getLong("bytes"))
+    })
+    val catalog = mutableCatalog.asStateFlow()
+    private val nativeGate = NativeModelGate()
     private var selectedBackend: String? = null
 
     @Synchronized
-    fun prepare(): File {
-        val manifest = JSONObject(context.assets.open("models/manifest.json").bufferedReader().use { it.readText() })
-        val model = manifest.getJSONArray("models").getJSONObject(0)
+    fun prepare(): File = prepareModel("espcn-x3")
+
+    /** Assemble bundled parts only; a complete digest is checked on every open. */
+    @Synchronized
+    fun prepareModel(id: String, control: ProcessingControl? = null): File {
+        val model = entries[id] ?: throw PhotoFailure("model_init")
         val bytes = model.getLong("bytes")
         val expected = model.getString("sha256").lowercase()
-        mutableState.value = mutableState.value.copy(requiredBytes = bytes)
-        verifiedFile?.let { cached ->
-            if (cached.isFile && cached.length() == bytes && sha256(cached) == expected) return cached
-            verifiedFile = null
-        }
-        val capabilities = DeviceCapabilityDetector.detect(context)
-        if (capabilities.storageBytes < bytes * 2 + 32L * 1024 * 1024) throw PhotoFailure("storage")
+        if (id == "espcn-x3") mutableState.value = mutableState.value.copy(requiredBytes = bytes)
+        control?.check()
         val directory = File(context.filesDir, "models")
         if (!directory.isDirectory && !directory.mkdirs()) throw PhotoFailure("storage")
-        val destination = File(directory, model.getString("file"))
-        if (!destination.isFile || destination.length() != bytes || sha256(destination) != expected) {
+        val filename = model.getString("file")
+        if (!filename.matches(Regex("[a-zA-Z0-9._-]+"))) throw PhotoFailure("model_integrity")
+        val destination = File(directory, filename)
+        if (!destination.isFile || destination.length() != bytes || sha256(destination, control) != expected) {
+            val capabilities = DeviceCapabilityDetector.detect(context)
+            if (capabilities.storageBytes < bytes * 2 + 32L * 1024 * 1024) throw PhotoFailure("storage")
+            changeStatus(id) { it.copy(preparing = true, error = null) }
             val temporary = File(directory, destination.name + ".part")
             try {
-                context.assets.open("models/${destination.name}").use { input ->
-                    temporary.outputStream().use { output -> input.copyTo(output) }
+                temporary.outputStream().use { output ->
+                    val parts = model.optJSONArray("parts")
+                    if (parts == null) {
+                        copyAsset("models/$filename", output, bytes, expected, control)
+                    } else {
+                        for (index in 0 until parts.length()) {
+                            val part = parts.getJSONObject(index)
+                            val partFile = part.getString("file")
+                            if (!partFile.matches(Regex("[a-zA-Z0-9._-]+"))) throw PhotoFailure("model_integrity")
+                            copyAsset("models/$partFile", output, part.getLong("bytes"), part.getString("sha256"), control)
+                        }
+                    }
                 }
-                if (temporary.length() != bytes || sha256(temporary) != expected) throw PhotoFailure("model_integrity")
+                if (temporary.length() != bytes || sha256(temporary, control) != expected) throw PhotoFailure("model_integrity")
+                control?.check()
                 try {
                     Files.move(
                         temporary.toPath(),
@@ -65,18 +100,118 @@ class ModelManager(private val context: Context) {
                 } catch (failure: Exception) {
                     throw PhotoFailure("storage", failure)
                 }
-            } finally { temporary.delete() }
+            } catch (failure: Throwable) {
+                if (failure !is ProcessingStopped) changeStatus(id) { it.copy(ready = false, error = (failure as? PhotoFailure)?.code ?: "model_init") }
+                throw failure
+            } finally {
+                temporary.delete()
+                changeStatus(id) { it.copy(preparing = false) }
+            }
         }
-        verifiedFile = destination
-        mutableState.value = mutableState.value.copy(ready = true, error = null)
+        if (id == "espcn-x3") mutableState.value = mutableState.value.copy(ready = true, error = null)
         return destination
     }
 
-    /** Run the actual bundled graph with each available provider; cache the fastest usable path. */
+    private fun copyAsset(path: String, output: java.io.OutputStream, bytes: Long,
+        expected: String, control: ProcessingControl?) {
+        val digest = MessageDigest.getInstance("SHA-256")
+        var count = 0L
+        context.assets.open(path).use { input ->
+            val buffer = ByteArray(64 * 1024)
+            while (true) {
+                control?.check()
+                val read = input.read(buffer)
+                if (read < 0) break
+                count += read
+                if (count > bytes) throw PhotoFailure("model_integrity")
+                digest.update(buffer, 0, read)
+                output.write(buffer, 0, read)
+            }
+        }
+        if (count != bytes || digest.digest().hex() != expected.lowercase()) throw PhotoFailure("model_integrity")
+    }
+
+    fun openModuleSession(id: String, control: ProcessingControl? = null): ModelSession {
+        val lease = nativeGate.acquire { control?.check() }
+        changeStatus(id) { it.copy(preparing = true, error = null) }
+        try {
+            val file = prepareModel(id, control)
+            control?.check()
+            requireHeadroom(id)
+            return createSession(file, "CPU", id, lease)
+        } catch (failure: Throwable) {
+            lease.close()
+            control?.check()
+            changeStatus(id) { it.copy(ready = false, error = (failure as? PhotoFailure)?.code ?: "model_init") }
+            throw if (failure is PhotoFailure) failure else PhotoFailure("model_init", failure)
+        } finally { changeStatus(id) { it.copy(preparing = false) } }
+    }
+
     @Synchronized
+    fun markInferenceReady(id: String) { changeStatus(id) { it.copy(ready = true, error = null) } }
+
+    @Synchronized
+    fun markInferenceFailed(id: String, code: String) { changeStatus(id) { it.copy(ready = false, error = code) } }
+
+    fun requireHeadroom(id: String) {
+        val estimate = entries[id]?.optLong("requiredAvailableMemoryBytes", 0) ?: throw PhotoFailure("model_init")
+        if (estimate > 0 && DeviceCapabilityDetector.detect(context).availableMemory < estimate) {
+            throw PhotoFailure("module_memory")
+        }
+    }
+
+    /** Sessions are probed and released serially, keeping failures independent. */
+    fun initializeAll() {
+        for (id in entries.keys) {
+            try {
+                if (id == "espcn-x3") {
+                    openSession().use { }
+                    markInferenceReady(id)
+                } else initializeModule(id)
+            } catch (failure: Exception) {
+                markInferenceFailed(id, (failure as? PhotoFailure)?.code ?: "model_init")
+            }
+        }
+    }
+
+    private fun initializeModule(id: String) {
+        openModuleSession(id).use { handle ->
+            val inputs = entries.getValue(id).getJSONArray("probeInputs")
+            val tensors = linkedMapOf<String, OnnxTensor>()
+            try {
+                for (index in 0 until inputs.length()) {
+                    val input = inputs.getJSONObject(index)
+                    val shapeJson = input.getJSONArray("shape")
+                    val shape = LongArray(shapeJson.length()) { shapeJson.getLong(it) }
+                    val count = shape.fold(1L, Math::multiplyExact).toInt()
+                    val maximum = input.optDouble("range", 1.0).toFloat()
+                    val values = FloatArray(count) { n ->
+                        if (input.getString("name") == "mask") 0f else ((n * 7 + n / 512) and 255) / 255f * maximum
+                    }
+                    tensors[input.getString("name")] = OnnxTensor.createTensor(environment, FloatBuffer.wrap(values), shape)
+                }
+                handle.session.run(tensors).use { result ->
+                    for (index in 0 until result.size()) {
+                        val tensor = result[index] as? OnnxTensor ?: throw PhotoFailure("model_shape")
+                        val buffer = tensor.floatBuffer
+                        if (!buffer.hasRemaining()) throw PhotoFailure("model_shape")
+                        while (buffer.hasRemaining()) if (!buffer.get().isFinite()) throw PhotoFailure("inference")
+                    }
+                }
+                markInferenceReady(id)
+            } finally { tensors.values.forEach { it.close() } }
+        }
+    }
+
+    private fun changeStatus(id: String, update: (ModelStatus) -> ModelStatus) {
+        mutableCatalog.update { current -> current[id]?.let { current + (id to update(it)) } ?: current }
+    }
+
+    /** Run the actual bundled graph with each available provider; cache the fastest usable path. */
     fun openSession(control: ProcessingControl? = null): ModelSession {
-        control?.check()
-        val file = prepare()
+        val lease = nativeGate.acquire { control?.check() }
+        try {
+        val file = prepareModel("espcn-x3", control)
         if (selectedBackend == null) {
             val cpu = try {
                 probe(file, "CPU", control)
@@ -97,6 +232,7 @@ class ModelManager(private val context: Context) {
                 }
             }
             selectedBackend = best.first
+            markInferenceReady("espcn-x3")
             mutableState.value = mutableState.value.copy(
                 backend = best.first,
                 probeMilliseconds = best.second / 1_000_000.0,
@@ -104,11 +240,12 @@ class ModelManager(private val context: Context) {
             if (BuildConfig.DEBUG) Log.d("LocalPhotoModel", "provider=${best.first} steadyInferenceMs=${best.second / 1_000_000.0} input=224x224")
         }
         // A driver may disappear under resource pressure; session creation always has a CPU fallback.
-        return runCatching { createSession(file, selectedBackend!!) }.getOrElse {
+        return runCatching { createSession(file, selectedBackend!!, lease = lease) }.getOrElse {
             selectedBackend = "CPU"
             mutableState.value = mutableState.value.copy(backend = "CPU")
-            createSession(file, "CPU")
+            createSession(file, "CPU", lease = lease)
         }
+        } catch (failure: Throwable) { lease.close(); throw failure }
     }
 
     @Synchronized
@@ -205,29 +342,36 @@ class ModelManager(private val context: Context) {
         return maximumDifference <= 0.15f && totalDifference / reference.size <= 0.02
     }
 
-    private fun createSession(file: File, backend: String): ModelSession {
+    private fun createSession(file: File, backend: String, id: String? = null, lease: AutoCloseable? = null): ModelSession {
         val options = OrtSession.SessionOptions()
         try {
             options.setInterOpNumThreads(1)
-            options.setIntraOpNumThreads(if (backend == "XNNPACK") 1 else min(4, Runtime.getRuntime().availableProcessors()))
-            options.setOptimizationLevel(OrtSession.SessionOptions.OptLevel.ALL_OPT)
+            options.setIntraOpNumThreads(if (backend == "XNNPACK") 1 else min(if (id == null) 4 else 2, Runtime.getRuntime().availableProcessors()))
+            if (id == "color-ddcolor") {
+                // Measured CPU peak falls from 3.2 GB to ~1.08 GB without changing weights/resolution.
+                options.setCPUArenaAllocator(false)
+                options.setMemoryPatternOptimization(false)
+                options.setOptimizationLevel(OrtSession.SessionOptions.OptLevel.BASIC_OPT)
+            } else options.setOptimizationLevel(OrtSession.SessionOptions.OptLevel.ALL_OPT)
             options.addConfigEntry("session.intra_op.allow_spinning", "0")
             when (backend) {
                 "XNNPACK" -> options.addXnnpack(mapOf("intra_op_num_threads" to min(4, Runtime.getRuntime().availableProcessors()).toString()))
                 "NNAPI" -> options.addNnapi(EnumSet.of(NNAPIFlags.CPU_DISABLED))
             }
-            return ModelSession(environment.createSession(file.absolutePath, options), options, backend)
+            return ModelSession(environment.createSession(file.absolutePath, options), options, backend, lease)
         } catch (failure: Throwable) { options.close(); throw failure }
     }
 
-    private fun sha256(file: File): String {
+    private fun sha256(file: File, control: ProcessingControl? = null): String {
         val digest = MessageDigest.getInstance("SHA-256")
         file.inputStream().use { input ->
             val buffer = ByteArray(64 * 1024)
-            while (true) { val read = input.read(buffer); if (read < 0) break; digest.update(buffer, 0, read) }
+            while (true) { control?.check(); val read = input.read(buffer); if (read < 0) break; digest.update(buffer, 0, read) }
         }
-        return digest.digest().joinToString("") { "%02x".format(it) }
+        return digest.digest().hex()
     }
+
+    private fun ByteArray.hex(): String = joinToString("") { "%02x".format(it) }
 
     private data class ProbeResult(val nanoseconds: Long, val samples: FloatArray)
 
@@ -241,6 +385,13 @@ class ModelSession(
     val session: OrtSession,
     private val options: OrtSession.SessionOptions,
     val backend: String,
+    private val lease: AutoCloseable? = null,
 ) : AutoCloseable {
-    override fun close() { session.close(); options.close() }
+    private val closed = java.util.concurrent.atomic.AtomicBoolean(false)
+    override fun close() {
+        if (closed.compareAndSet(false, true)) {
+            try { session.close() }
+            finally { try { options.close() } finally { lease?.close() } }
+        }
+    }
 }

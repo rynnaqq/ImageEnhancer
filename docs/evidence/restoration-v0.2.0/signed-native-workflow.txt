@@ -1,0 +1,27 @@
+Verified signed-native workflow: 2026-10-02T17:26:01+07:00
+AVD: LocalEnhancer; API35 x86_64; RAM3072MiB
+airplane_mode_on=1
+wifi_on=0
+mobile_data=0
+versionCode=2 minSdk=29 targetSdk=35
+versionName=0.2.0
+pkgFlags=[ HAS_CODE ALLOW_CLEAR_USER_DATA ]
+Installed APK SHA-256: 356beabcefeda72f6b39690120b444cd15200091188cde400836b8a30285409e
+Five real native model probes: all Ready
+Ready · 0.2 MB
+Ready · 0.2 MB
+Ready · 54.8 MB
+Ready · 129.2 MB
+Ready · 198.4 MB
+Automatic scratch repair, face detail, learned colorization: enabled; nonempty painted repair mask.
+Combined native UI job: completed 256x256 source -> 512x512 gallery result.
+Original v0.1.0 completed project and gallery result retained across same-key -r upgrade.
+Completed result retained after Home and return.
+Source SHA-256 values match the inputs before processing:
+9e0d795742dbb4c66f4afc061107fdef34830d9d736c4bee93521d6f61f0be29  /sdcard/Download/qa-upgrade-source.png
+29bacdec6c06fddd730720946cc470bd42fd1bc2cb3ffc6559e959c5a9cf703f  /sdcard/Download/qa-restoration-source.png
+MediaStore QA entries:
+Row: 5 _display_name=qa-upgrade-source.png, width=320, height=240, _size=3011
+Row: 6 _display_name=qa-restoration-source.png, width=256, height=256, _size=112350
+Row: 7 _display_name=qa-upgrade-source_enhanced_20261002_170700_920_e5ad4873.jpg, width=640, height=480, _size=48376
+Row: 8 _display_name=qa-restoration-source_enhanced_20261002_171736_605_413c999f.jpg, width=512, height=512, _size=109662

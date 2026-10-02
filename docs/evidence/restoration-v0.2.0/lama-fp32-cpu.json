@@ -1,0 +1,42 @@
+{
+  "model": "lama-fp32-complete.onnx",
+  "sha256": "1faef5301d78db7dda502fe59966957ec4b79dd64e16f03ed96913c7a4eb68d6",
+  "runtime": "1.30.0",
+  "provider": [
+    "CPUExecutionProvider"
+  ],
+  "threads": 2,
+  "session_seconds": 19.123636099999203,
+  "run_seconds": [
+    6.185689899999488,
+    6.476113800001258
+  ],
+  "peak_process_rss_bytes": 997916672,
+  "inputs": {
+    "image": [
+      1,
+      3,
+      512,
+      512
+    ],
+    "mask": [
+      1,
+      1,
+      512,
+      512
+    ]
+  },
+  "outputs": [
+    {
+      "shape": [
+        1,
+        3,
+        512,
+        512
+      ],
+      "minimum": 0.0,
+      "maximum": 255.0,
+      "mean": 114.5355224609375
+    }
+  ]
+}

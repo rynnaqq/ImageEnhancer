@@ -46,16 +46,28 @@
     <string name="highlights">Highlights</string><string name="shadows">Shadows</string><string name="white_point">White point</string><string name="black_point">Black point</string><string name="gamma">Gamma</string>
     <string name="color">Color</string><string name="temperature">Temperature</string><string name="tint">Tint</string><string name="saturation">Saturation</string><string name="vibrance">Vibrance</string>
     <string name="hue">Hue</string><string name="red_balance">Red balance</string><string name="green_balance">Green balance</string><string name="blue_balance">Blue balance</string><string name="faded_color">Faded color recovery</string>
-    <string name="restoration_tools">Restoration tools</string><string name="model_dependency">Additional local model required</string>
-    <string name="dependency_explanation">These tools need verified, redistributable on-device models and quality tests before they can run. No photo is sent to a server.</string>
-    <string name="old_photo">Old photo, scratch &amp; dust restoration</string><string name="old_photo_dependency">Needs a bundled damage detector and scratch repair model, tiled mask processing and texture preservation tests.</string>
-    <string name="face">Face restoration</string><string name="face_dependency">Needs bundled face detection, alignment and restoration models with identity-preservation validation.</string>
-    <string name="colorization">Black-and-white colorization</string><string name="colorization_dependency">Needs a bundled colorization model with natural-color and portrait quality validation.</string>
-    <string name="reconstruction">Missing-area reconstruction</string><string name="reconstruction_dependency">Needs a bundled inpainting model, editable damage masks and restored-region tracking.</string>
+    <string name="restoration_tools">Restoration tools</string>
+    <string name="restoration_description">Choose only the restoration this photo needs. All models run locally and are prepared from the installed app on first use.</string>
+    <string name="old_photo">Old photo, scratch &amp; dust restoration</string>
+    <string name="face">Face restoration</string>
+    <string name="colorization">Black-and-white colorization</string>
+    <string name="reconstruction">Missing-area reconstruction</string>
+    <string name="automatic_scratch_repair">Detect and repair fine scratches</string><string name="enable_scratch_repair">Enable automatic scratch repair</string>
+    <string name="old_photo_model_description">A conservative local detector selects likely scratches, then LaMa fills only those regions. Review important photos after processing.</string>
+    <string name="face_restoration_toggle">Restore detected faces</string><string name="enable_face_restoration">Enable face restoration</string><string name="face_strength">Face restoration strength</string>
+    <string name="face_model_description">YuNet detects faces and a SwinIR restoration model rebuilds face-region detail. Generated detail may differ from the person or the historic scene.</string>
+    <string name="colorization_toggle">Add learned color</string><string name="enable_colorization">Enable black-and-white colorization</string><string name="color_strength">Colorization strength</string>
+    <string name="colorization_model_description">DDColor predicts color locally while the original lightness and transparency are preserved. Predicted colors are not historically verified.</string>
+    <string name="reconstruction_description">Draw over missing or damaged areas. LaMa reconstructs only the selected mask; unselected pixels stay unchanged.</string>
+    <string name="repair_strength">Repair blend strength</string><string name="brush">Brush</string><string name="erase">Erase</string><string name="clear_mask">Clear</string>
+    <string name="repair_brush_size">Repair brush size</string><string name="repair_brush_size_value">Brush size: %1$d%%</string><string name="repair_mask_canvas">Repair mask editor</string>
+    <string name="repair_mask_help">Draw inside the photo. Green marks show the selected reconstruction area; use Erase or Clear to correct it.</string>
+    <string name="repair_select_photo">Choose a photo in the editor to draw a reconstruction mask.</string><string name="repair_mask_required">Draw a nonempty mask before reconstruction can run.</string>
+    <string name="repair_mask_ready">Selected areas will be reconstructed.</string><string name="repair_mask_transform_cleared">The reconstruction mask was cleared because crop or orientation changed. Draw it again on the updated preview.</string>
     <string name="tiff_title">TIFF import</string><string name="tiff_dependency">TIFF needs a bundled decoder. This build supports JPG, PNG, WebP, HEIC and BMP.</string>
     <string name="not_available">Unavailable in this build</string><string name="reference_count">%1$d reference photos stored with this project</string>
     <string name="profile">Processing profile</string><string name="quality">Quality</string><string name="balanced">Balanced</string><string name="fast">Fast</string>
-    <string name="profile_description">Quality is the default. Tile size adapts to memory and heat. This build uses one bundled model.</string>
+    <string name="profile_description">Quality is the default. Tile size and optional restoration stages adapt to memory and heat.</string>
     <string name="export_settings">Save options</string><string name="format">File format</string><string name="export_quality">Export quality</string><string name="strip_metadata">Remove metadata</string>
     <string name="strip_metadata_body">Keep camera and location details out of saved photos. Shared copies always have metadata removed.</string>
     <string name="metadata_note">When kept, only capture date and camera name are copied to JPEG. Location is never copied.</string>
@@ -66,13 +78,18 @@
     <string name="status_draft">Draft</string><string name="status_queued">Waiting</string><string name="status_processing">In progress</string><string name="status_completed">Completed</string>
     <string name="status_cancelled">Cancelled</string><string name="status_failed">Needs attention</string><string name="status_interrupted">Paused</string>
     <string name="stage_decode">Preparing image</string><string name="stage_analyze">Checking photo condition</string><string name="stage_denoise">Reducing noise</string><string name="stage_deblur">Improving clarity</string>
-    <string name="stage_lighting">Balancing the light</string><string name="stage_color">Refining color</string><string name="stage_super_resolution">Recovering detail</string><string name="stage_refine">Finishing touches</string><string name="stage_export">Saving your result</string>
+    <string name="stage_lighting">Balancing the light</string><string name="stage_color">Refining color</string><string name="stage_repair">Repairing selected damage</string><string name="stage_colorize">Adding learned color</string><string name="stage_face_restore">Restoring detected faces</string><string name="stage_super_resolution">Recovering detail</string><string name="stage_refine">Finishing touches</string><string name="stage_export">Saving your result</string>
     <string name="detected">Photo condition</string><string name="planned">Enhancement plan</string><string name="detected_low_resolution">Low resolution</string><string name="detected_noise">Noise</string><string name="detected_blur">Soft detail</string>
     <string name="detected_underexposure">Low light</string><string name="detected_overexposure">Bright highlights</string><string name="detected_low_contrast">Low contrast</string><string name="detected_color_cast">Color cast</string>
     <string name="detected_faded_color">Faded color</string><string name="detected_monochrome">Black and white</string><string name="no_defects">Only a gentle refinement is needed.</string>
     <string name="error_decode">This photo could not be decoded.</string><string name="error_storage">Not enough storage to create this output.</string>
     <string name="error_memory">This photo is too large at the requested size on this device. Try a lower multiplier or a smaller crop.</string>
+    <string name="error_resume_regions">Restoration checkpoint metadata is missing. Retry this image from the beginning. Your original is safe.</string>
     <string name="error_model">The local model could not be initialized. Free some space and retry.</string><string name="error_integrity">The bundled model did not pass its integrity check. Reinstall a verified app package.</string>
+    <string name="error_module_model">A selected restoration model could not be prepared. Other enhancement tools remain available; retry or reinstall a verified app package.</string>
+    <string name="error_module_memory">This device does not currently have enough free memory for the selected restoration. Turn off that tool or close other apps and retry.</string>
+    <string name="error_repair_mask_large">The reconstruction selection covers too much of the photo. Select a smaller area, covering less than 45% of the image.</string>
+    <string name="notice_face_detail_preserved">Larger faces were preserved to avoid losing existing detail.</string>
     <string name="error_inference">This photo could not be enhanced. Your original is safe. Try a lower size or retry.</string><string name="error_export">The result could not be saved. Check available storage and try again.</string>
     <string name="error_interrupted">Processing was paused by the system or device temperature. Resume to continue from the last safe stage.</string>
     <string name="error_service">The system could not start processing. Return to the app and try again.</string>
@@ -80,11 +97,14 @@
     <string name="notice_scale">The output multiplier was reduced to fit this device. Actual dimensions are shown above.</string>
     <string name="notice_sampled_scale">The working copy and output multiplier were reduced to fit this device. The original remains untouched.</string>
     <string name="notice_gallery_failed">The enhanced result is safe in this project, but gallery saving failed. Tap Save a new copy to retry.</string>
+    <string name="notice_face_no_faces">No suitable face was detected, so face restoration was skipped.</string><string name="notice_face_protected_regions">Previously reconstructed regions were retained; overlapping faces were skipped.</string><string name="notice_face_limit">At most 16 faces were processed in this pass.</string><string name="notice_repair_no_mask">Reconstruction was skipped because its mask was empty.</string>
+    <string name="notice_repair_no_scratches">No likely scratches were found, so automatic repair was skipped.</string><string name="notice_reconstructed_regions">Previously reconstructed areas are protected from repeated face restoration.</string>
     <string name="local_engine">Local engine</string><string name="model_storage">AI models require %1$s MB. Available space: %2$s GB.</string>
     <string name="device_info">Android %1$d · %2$d CPU cores · %3$s MB processing budget</string>
-    <string name="engine_ready">Bundled model ready</string><string name="initialize_engine">Prepare local engine</string>
-    <string name="baseline_notice">This build includes a lightweight super-resolution model. Professional restoration and hardware quality validation are still pending.</string>
-    <string name="licenses">Model licenses &amp; attribution</string><string name="license_body">Bundled ESPCN model: ONNX Model Zoo, Apache 2.0. Local inference: Microsoft ONNX Runtime, MIT. Models are included in the installed application. No runtime download occurs.</string>
+    <string name="engine_ready">All bundled models ready</string><string name="initialize_engine">Prepare all local models</string>
+    <string name="model_ready">Ready</string><string name="model_included">Bundled · initializes on first use</string><string name="model_preparing">Preparing…</string><string name="model_integrity_failed">Integrity check failed</string><string name="model_status_size">%1$s · %2$s MB</string>
+    <string name="baseline_notice">Bundled models run offline and initialize independently. Super-resolution restores luminance at 3×; other output sizes use local resampling. Restoration can generate plausible detail and color, so review important photos.</string>
+    <string name="licenses">Model licenses &amp; attribution</string><string name="license_body">The installed model catalog and all archived license files are listed below. Local inference uses Microsoft ONNX Runtime under the MIT license. No runtime download occurs.</string>
     <string name="privacy_title">Your photos stay yours</string><string name="privacy_body">The app has no Internet permission, account, analytics or cloud processing. Private projects are excluded from backups. Sharing only happens when you choose it.</string>
     <string name="done">Done</string><string name="select_photo">Select photo</string><string name="batch_position">Photo %1$d of %2$d</string>
     <string name="error_resume_memory">This job is paused because its saved stage needs more memory. Close other apps and resume, or change the settings to start again.</string>

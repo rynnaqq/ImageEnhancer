@@ -1,0 +1,6 @@
+AVD: LocalEnhancer
+API: 35
+ABI: x86_64
+Airplane: 1
+WiFi: 0
+Mobile data setting: 0

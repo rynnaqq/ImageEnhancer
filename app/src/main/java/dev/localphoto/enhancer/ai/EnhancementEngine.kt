@@ -26,9 +26,11 @@ class EnhancementEngine(
     private val files = repository.files
     private val dao = repository.dao
     private val powerManager = context.getSystemService(PowerManager::class.java)
+    private val regions = GeneratedRegions(files)
 
     suspend fun process(project: PhotoProject, control: ProcessingControl) {
         var bitmap: Bitmap? = null
+        var generatedRegions: Bitmap? = null
         var completed = false
         var pendingResult: File? = null
         try {
@@ -40,6 +42,10 @@ class EnhancementEngine(
             val persisted = project.planJson.takeIf { it.isNotBlank() }?.let(::readPersistedPlan)
             val settings = persisted?.settings ?: project.settings
             val source = files.owned(File(project.basePath ?: project.sourcePath))
+            val repairAlreadyCheckpointed = checkpoint != null && persisted != null &&
+                persisted.stages.take(project.checkpointStage + 1).contains(Stage.REPAIR)
+            generatedRegions = if (checkpoint != null) regions.read(checkpoint, required = repairAlreadyCheckpointed)
+                else regions.read(source, settings.transform)
             val originalDimensions = files.dimensions(source)
 
             update(project.id, Stage.DECODE, project.progress)
@@ -119,7 +125,40 @@ class EnhancementEngine(
                 val current = requireNotNull(bitmap) { "Decoded bitmap was released before stage processing" }
                 val parameters = parametersFor(stage, plan.adjustments)
                 val requestedTileSize = DeviceCapabilityDetector.detect(context).tileSize(settings.profile)
-                val next = processStage(
+                val next = when (stage) {
+                    Stage.REPAIR -> {
+                        val repaired = NeuralRestoration(context, models).repair(current, settings.restoration,
+                            control, { checkWorkUnit(control, 64) }) { fraction ->
+                            update(project.id, stage, stageProgress(index, fraction, stages.size))
+                        }
+                        try {
+                            val merged = regions.merge(generatedRegions, repaired.mask, current.width, current.height)
+                            generatedRegions?.recycle()
+                            generatedRegions = merged
+                        } catch (failure: Throwable) { repaired.bitmap.recycle(); throw failure }
+                        if (repaired.selectedPixels == 0) notice = addNotice(notice,
+                            if (settings.restoration.scratchRepair && settings.restoration.maskStrokes.isEmpty()) "repair_no_scratches" else "repair_no_mask")
+                        else notice = addNotice(notice, "reconstructed_regions")
+                        repaired.bitmap
+                    }
+                    Stage.COLORIZE -> NeuralRestoration(context, models).colorize(current,
+                        settings.restoration.colorStrength, control, { checkWorkUnit(control, 64) }) { fraction ->
+                        update(project.id, stage, stageProgress(index, fraction, stages.size))
+                    }
+                    Stage.FACE_RESTORE -> {
+                        val restored = FaceRestorer(models).restore(current, settings.restoration.faceStrength,
+                            generatedRegions, control, { checkWorkUnit(control, 64) }) { fraction ->
+                            update(project.id, stage, stageProgress(index, fraction, stages.size))
+                        }
+                        if (restored.detectedFaces == 0) notice = addNotice(notice, "face_no_faces")
+                        if (restored.protectedFaces > 0) notice = addNotice(notice, "face_protected_regions")
+                        if (restored.detailPreservedFaces > 0) notice = addNotice(notice, "face_detail_preserved")
+                        if (restored.restoredFaces >= 16 && restored.detectedFaces >
+                            restored.restoredFaces + restored.protectedFaces + restored.detailPreservedFaces
+                        ) notice = addNotice(notice, "face_limit")
+                        restored.bitmap
+                    }
+                    else -> processStage(
                     stage = stage,
                     source = current,
                     adjustments = parameters,
@@ -129,12 +168,14 @@ class EnhancementEngine(
                 ) { fraction ->
                     update(project.id, stage, stageProgress(index, fraction, stages.size))
                 }
+                }
                 bitmap = next
                 current.recycle()
                 control.check()
 
                 val stageFile = File(files.directory(project.id), "temporary/stage-$index.png")
                 files.atomicPng(bitmap, stageFile)
+                regions.write(stageFile, generatedRegions)
                 val previous = dao.find(project.id)
                 if (previous != null) {
                     dao.update(
@@ -146,7 +187,7 @@ class EnhancementEngine(
                     )
                     previous.checkpointPath
                         ?.takeIf { it != stageFile.absolutePath }
-                        ?.let { files.owned(File(it)).delete() }
+                        ?.let { files.owned(File(it)).also { old -> regions.companion(old).delete(); old.delete() } }
                 }
             }
 
@@ -156,6 +197,7 @@ class EnhancementEngine(
             val result = File(files.directory(project.id), "results/result-$revision.png")
             pendingResult = result
             files.atomicPng(bitmap, result)
+            regions.write(result, generatedRegions)
             control.check()
             var current = dao.find(project.id) ?: throw PhotoFailure("export")
             current = current.copy(
@@ -183,7 +225,7 @@ class EnhancementEngine(
             repository.removeSettledTemporary(current)
         } catch (failure: Throwable) {
             if (completed) return
-            pendingResult?.let { runCatching { files.owned(it).delete() } }
+            pendingResult?.let { runCatching { regions.companion(it).delete(); files.owned(it).delete() } }
             val stopped = runCatching { control.check() }.exceptionOrNull() as? ProcessingStopped
             val interrupted = (failure as? ProcessingStopped)?.interrupted ?: stopped?.interrupted
             val code = when {
@@ -215,6 +257,7 @@ class EnhancementEngine(
             if (status == ProjectStatus.INTERRUPTED) throw ProcessingStopped(true)
         } finally {
             bitmap?.takeIf { !it.isRecycled }?.recycle()
+            generatedRegions?.takeIf { !it.isRecycled }?.recycle()
         }
     }
 

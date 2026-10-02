@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "models": [
     {
       "id": "espcn-x3",
@@ -13,10 +13,221 @@
       "bytes": 240078,
       "input": "float32 NCHW [1,1,224,224], YCbCr luminance normalized to 0..1; smaller tiles are centered reflection-padded without resizing",
       "output": "float32 NCHW [1,1,672,672], 3x luminance; padding is cropped and chroma is locally resampled",
-      "backends": ["CPU", "XNNPACK", "NNAPI when model/device probe succeeds"],
+      "backends": [
+        "CPU",
+        "XNNPACK",
+        "NNAPI when model/device probe succeeds"
+      ],
       "workingMemoryEstimateBytes": 33554432,
       "qualityStatus": "Working lightweight baseline; professional restoration quality is not validated",
-      "outputScaling": "Learned 3x luminance followed by local resampling to requested 2x, 4x or 8x"
+      "outputScaling": "Learned 3x luminance followed by local resampling to requested 2x, 4x or 8x",
+      "label": "ESPCN super-resolution"
+    },
+    {
+      "id": "yunet",
+      "label": "YuNet face detection",
+      "bytes": 229738,
+      "sha256": "ebafce4e3c118d6554634be5c27ab333b4c047a9a8c3faf1d7cf93101c22f0f0",
+      "license": "MIT",
+      "licenseAsset": "licenses/YUNET-MIT.txt",
+      "source": "https://github.com/opencv/opencv_zoo/tree/47534e27c9851bb1128ccc0102f1145e27f23f98/models/face_detection_yunet",
+      "input": "float32 BGR NCHW [1,3,H,W], 0..255; preserve aspect and pad right/bottom to multiples of32",
+      "output": "12 classification, objectness, box and five-landmark tensors at strides8,16,32",
+      "probeInputs": [
+        {
+          "name": "input",
+          "shape": [
+            1,
+            3,
+            320,
+            320
+          ],
+          "range": 255
+        }
+      ],
+      "requiredAvailableMemoryBytes": 67108864,
+      "file": "yunet.onnx",
+      "backends": [
+        "CPU"
+      ],
+      "version": "Bundled restoration bank v0.2.0"
+    },
+    {
+      "id": "face-swinir",
+      "label": "SwinIR face-region detail",
+      "bytes": 57472188,
+      "sha256": "c9b93e139b7d01e22041f8884cef6b80ff67fbc0f16f7fef21b0dfacc55ce041",
+      "license": "Apache-2.0",
+      "licenseAsset": "licenses/SWINIR-APACHE-2.0.txt",
+      "source": "https://github.com/JingyunLiang/SwinIR/releases/tag/v0.0",
+      "upstreamRevision": "6545850fbf8df298df73d81f3e8cba638787c8bd",
+      "checkpointSha256": "b9afb61e65e04eb7f8aba5095d070bbe9af28df76acd0c9405aeb33b814bcfc6",
+      "converter": "scripts/export-swinir.py",
+      "input": "float32 RGB NCHW [1,3,96,96], 0..1; five-landmark aligned face region; mean handled inside graph",
+      "output": "float32 RGB NCHW [1,3,384,384], clamp0..1 then inverse warp and feather against source",
+      "qualityStatus": "General real-image neural detail enhancement on face regions; not an identity-aware face GAN",
+      "probeInputs": [
+        {
+          "name": "input",
+          "shape": [
+            1,
+            3,
+            96,
+            96
+          ]
+        }
+      ],
+      "requiredAvailableMemoryBytes": 891289600,
+      "file": "face-swinir.onnx",
+      "backends": [
+        "CPU"
+      ],
+      "version": "Bundled restoration bank v0.2.0",
+      "parts": [
+        {
+          "file": "face-swinir-00.bin",
+          "bytes": 33554432,
+          "sha256": "16417d5a64b485bc09a1711e48c93eb0345c7b8e0dd752e9ac85cf7c67b1ad33"
+        },
+        {
+          "file": "face-swinir-01.bin",
+          "bytes": 23917756,
+          "sha256": "d1163219abe2f3743f3c857fb8bdb9932efbce6944fd806fd253b2a54a50b16f"
+        }
+      ]
+    },
+    {
+      "id": "color-ddcolor",
+      "label": "DDColor learned colorization",
+      "bytes": 135444402,
+      "sha256": "2653da00dc15e54a45e5200b61dbf82ee9ceaf56b02bb9b9657569ac775e82e6",
+      "license": "Apache-2.0",
+      "licenseAsset": "licenses/DDCOLOR-APACHE-2.0.txt",
+      "source": "https://huggingface.co/edgetools/ddcolor/tree/c4c98361d19eda29908cc960be39e8eeb44fc530",
+      "upstream": "https://huggingface.co/piddnad/DDColor-models",
+      "input": "float32 RGB NCHW [1,3,512,512], 0..1 neutral Lab gray; no ImageNet normalization",
+      "output": "float32 Lab ab NCHW [1,2,512,512]; retain original source L, resize chroma, strength blend, original alpha",
+      "cpuOptions": "Arena and memory pattern disabled; BASIC graph optimization; two threads",
+      "probeInputs": [
+        {
+          "name": "input",
+          "shape": [
+            1,
+            3,
+            512,
+            512
+          ]
+        }
+      ],
+      "requiredAvailableMemoryBytes": 1258291200,
+      "file": "color-ddcolor.onnx",
+      "backends": [
+        "CPU"
+      ],
+      "version": "Bundled restoration bank v0.2.0",
+      "parts": [
+        {
+          "file": "color-ddcolor-00.bin",
+          "bytes": 33554432,
+          "sha256": "f4876bc9b37d559743a136179fb30c3ba7e066b593131c98cf31eab0ba2f1a6d"
+        },
+        {
+          "file": "color-ddcolor-01.bin",
+          "bytes": 33554432,
+          "sha256": "10674024832992103428b5419c9debc209c9eb978a989f0b281b149ce63ad3b8"
+        },
+        {
+          "file": "color-ddcolor-02.bin",
+          "bytes": 33554432,
+          "sha256": "93d8f6e48b5eaa23b228d2bc0e0c5563921c48ca0f0ce58d2c2d254511d9ee95"
+        },
+        {
+          "file": "color-ddcolor-03.bin",
+          "bytes": 33554432,
+          "sha256": "69a8c6f16d975c5989bc17e1f2d2a47454b9d3d7460856fdf9fdc4afe4833198"
+        },
+        {
+          "file": "color-ddcolor-04.bin",
+          "bytes": 1226674,
+          "sha256": "3c4ebb691db798fbccc2cf285f03f5c6dd3f65e73fab0de0ce2e40a8e531d00f"
+        }
+      ]
+    },
+    {
+      "id": "repair-lama",
+      "label": "LaMa scratch and region repair",
+      "bytes": 208044816,
+      "sha256": "1faef5301d78db7dda502fe59966957ec4b79dd64e16f03ed96913c7a4eb68d6",
+      "license": "Apache-2.0",
+      "licenseAsset": "licenses/LAMA-APACHE-2.0.txt",
+      "source": "https://huggingface.co/Carve/LaMa-ONNX/tree/c3c0c9e468934d62e79c329e35d82dd09ff8c444",
+      "upstream": "https://github.com/advimman/lama",
+      "input": "float32 RGB image [1,3,512,512]0..1 and mask [1,1,512,512]1=hole; source-context ROI",
+      "output": "float32 RGB [1,3,512,512]0..255; composite only selected original pixels, retain original alpha",
+      "qualityStatus": "FP32 selected instead of quantized OpenCV derivative after real-output comparison",
+      "probeInputs": [
+        {
+          "name": "image",
+          "shape": [
+            1,
+            3,
+            512,
+            512
+          ]
+        },
+        {
+          "name": "mask",
+          "shape": [
+            1,
+            1,
+            512,
+            512
+          ]
+        }
+      ],
+      "requiredAvailableMemoryBytes": 1205862400,
+      "file": "repair-lama.onnx",
+      "backends": [
+        "CPU"
+      ],
+      "version": "Bundled restoration bank v0.2.0",
+      "parts": [
+        {
+          "file": "repair-lama-00.bin",
+          "bytes": 33554432,
+          "sha256": "6528abaa0c8d16c7f718cc2d562afeb5211cadc873211e654d3484f8d38f0acc"
+        },
+        {
+          "file": "repair-lama-01.bin",
+          "bytes": 33554432,
+          "sha256": "8dfaa136871c8dc7c819060cc7c778ca5deaa28ab89ae2a26c305367d9f4b7d4"
+        },
+        {
+          "file": "repair-lama-02.bin",
+          "bytes": 33554432,
+          "sha256": "a118d5e866caa0e75f2c77513eb60bfa74e466e79b210c04059abd258179d4eb"
+        },
+        {
+          "file": "repair-lama-03.bin",
+          "bytes": 33554432,
+          "sha256": "a189a5f990f7681678865c4da60177edced33839feecab5818f38fc6bde362e4"
+        },
+        {
+          "file": "repair-lama-04.bin",
+          "bytes": 33554432,
+          "sha256": "84ac57b938f721f30ac6eeaf304f05a7b7386c583b913df146251edfff5a03fc"
+        },
+        {
+          "file": "repair-lama-05.bin",
+          "bytes": 33554432,
+          "sha256": "2dac210bbbeadc581200978b11b4c740362d50309a6155ae67dcc0aa9e099764"
+        },
+        {
+          "file": "repair-lama-06.bin",
+          "bytes": 6718224,
+          "sha256": "25aed5e8e2cb5deb769ca1ed295ba87db39dee465ddf7d65705f24b10ab35ef6"
+        }
+      ]
     }
   ]
 }

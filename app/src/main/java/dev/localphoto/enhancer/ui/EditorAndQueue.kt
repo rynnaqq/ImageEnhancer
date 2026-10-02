@@ -27,7 +27,17 @@ import kotlin.math.roundToInt
     val metrics by vm.metrics.collectAsStateWithLifecycle()
     val device by vm.capabilities.collectAsStateWithLifecycle()
     var delete by remember { mutableStateOf(false) }
-    val update: (EnhanceSettings) -> Unit = vm::updateDraft
+    var maskClearedForTransform by remember(project.id) { mutableStateOf(false) }
+    val update: (EnhanceSettings) -> Unit = { next ->
+        val transformChanged = next.transform.normalized() != settings.transform.normalized()
+        if (transformChanged && settings.restoration.maskStrokes.isNotEmpty()) {
+            vm.updateDraft(next.copy(restoration = next.restoration.copy(maskStrokes = emptyList())))
+            maskClearedForTransform = true
+        } else {
+            vm.updateDraft(next)
+            if (next.restoration.maskStrokes.isNotEmpty()) maskClearedForTransform = false
+        }
+    }
     val completedTransform = if (project.outputPath != null) runCatching {
         SettingsCodec.decode(JSONObject(project.planJson).getJSONObject("settings").toString()).transform
     }.getOrDefault(settings.transform) else settings.transform
@@ -84,17 +94,20 @@ import kotlin.math.roundToInt
                 } ?: LinearProgressIndicator(Modifier.fillMaxWidth())
             }
             item { TransformControls(settings, update) }
+            if (maskClearedForTransform) item { Notice(stringResource(R.string.repair_mask_transform_cleared)) }
             item { ResolutionControls(settings, transformedDimensions.first, transformedDimensions.second, device, update) }
             if (!settings.auto) item { Column(verticalArrangement = Arrangement.spacedBy(10.dp)) { ManualControls(settings, update) } }
             item { ProfileControls(settings, update) }
             item { OutputControls(settings, update) }
+            item { Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                RestorationControls(settings, update, project.basePath ?: project.sourcePath, vm.graph.files)
+            } }
             item {
                 Button(onClick = enhance, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
                     Icon(Icons.Outlined.AutoFixHigh, null); Spacer(Modifier.width(8.dp)); Text(stringResource(if (project.outputPath != null) R.string.enhance_again else R.string.enhance))
                 }
                 TextButton(onClick = { vm.saveDraft(true) }, Modifier.fillMaxWidth()) { Text(stringResource(R.string.save_project)) }
             }
-            item { Column(verticalArrangement = Arrangement.spacedBy(10.dp)) { RestorationDependencies() } }
             item {
                 if (project.galleryUri != null) TextButton(onClick = { vm.deleteGalleryCopy(project) }) { Text(stringResource(R.string.delete_saved_copy)) }
                 TextButton(onClick = { delete = true }) { Text(stringResource(R.string.delete_project), color = MaterialTheme.colorScheme.error) }
