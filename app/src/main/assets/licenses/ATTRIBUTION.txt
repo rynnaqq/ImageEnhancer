@@ -1,0 +1,8 @@
+Local Photo Enhancer includes the ONNX Model Zoo ESPCN super-resolution-10 model.
+Model and model card: https://huggingface.co/onnxmodelzoo/super-resolution-10
+Upstream: https://github.com/onnx/models
+License: Apache License, Version 2.0 (full text included in this directory).
+Model architecture: Real-Time Single Image and Video Super-Resolution Using an
+Efficient Sub-Pixel Convolutional Neural Network, Shi et al., CVPR 2016.
+Runtime: Microsoft ONNX Runtime, MIT license, https://github.com/microsoft/onnxruntime
+All model files are installed with the app; the app performs no model downloads.

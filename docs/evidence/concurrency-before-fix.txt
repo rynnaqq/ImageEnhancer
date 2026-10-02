@@ -1,0 +1,76 @@
+
+dev.localphoto.enhancer.ConcurrencyInstrumentedTest:
+Error in delayedEnqueueCannotReplaceNewerRecipeWithItsOldSnapshot(dev.localphoto.enhancer.ConcurrencyInstrumentedTest):
+java.lang.AssertionError: expected:<EnhanceSettings(auto=false, profile=QUALITY, adjustments=Adjustments(scale=4, denoise=0.0, deblur=0.0, sharpen=15.0, detailPreservation=80.0, exposure=0.75, brightness=0.0, contrast=0.0, highlights=0.0, shadows=0.0, whitePoint=0.0, blackPoint=0.0, gamma=1.0, temperature=0.0, tint=0.0, saturation=0.0, vibrance=0.0, hue=0.0, redBalance=0.0, greenBalance=0.0, blueBalance=0.0, fadedColor=0.0), transform=TransformSettings(rotationDegrees=0, flipHorizontal=false, flipVertical=false, straightenDegrees=0.0, cropLeft=0.0, cropTop=0.0, cropRight=1.0, cropBottom=1.0), output=OutputSettings(format=JPEG, quality=97, stripMetadata=true))> but was:<EnhanceSettings(auto=true, profile=QUALITY, adjustments=Adjustments(scale=2, denoise=0.0, deblur=0.0, sharpen=15.0, detailPreservation=80.0, exposure=0.0, brightness=0.0, contrast=0.0, highlights=0.0, shadows=0.0, whitePoint=0.0, blackPoint=0.0, gamma=1.0, temperature=0.0, tint=0.0, saturation=0.0, vibrance=0.0, hue=0.0, redBalance=0.0, greenBalance=0.0, blueBalance=0.0, fadedColor=0.0), transform=TransformSettings(rotationDegrees=0, flipHorizontal=false, flipVertical=false, straightenDegrees=0.0, cropLeft=0.0, cropTop=0.0, cropRight=1.0, cropBottom=1.0), output=OutputSettings(format=JPEG, quality=97, stripMetadata=true))>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:120)
+	at org.junit.Assert.assertEquals(Assert.java:146)
+	at dev.localphoto.enhancer.ConcurrencyInstrumentedTest$delayedEnqueueCannotReplaceNewerRecipeWithItsOldSnapshot$1.invokeSuspend(ConcurrencyInstrumentedTest.kt:54)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:101)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:95)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:69)
+	at kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source:1)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:47)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(Unknown Source:1)
+	at dev.localphoto.enhancer.ConcurrencyInstrumentedTest.delayedEnqueueCannotReplaceNewerRecipeWithItsOldSnapshot(ConcurrencyInstrumentedTest.kt:39)
+
+Error in delayedAutosaveCannotRevertAnAlreadyQueuedProjectToDraft(dev.localphoto.enhancer.ConcurrencyInstrumentedTest):
+java.lang.AssertionError: expected:<QUEUED> but was:<DRAFT>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:120)
+	at org.junit.Assert.assertEquals(Assert.java:146)
+	at dev.localphoto.enhancer.ConcurrencyInstrumentedTest$delayedAutosaveCannotRevertAnAlreadyQueuedProjectToDraft$1.invokeSuspend(ConcurrencyInstrumentedTest.kt:35)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:101)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:95)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:69)
+	at kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source:1)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:47)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(Unknown Source:1)
+	at dev.localphoto.enhancer.ConcurrencyInstrumentedTest.delayedAutosaveCannotRevertAnAlreadyQueuedProjectToDraft(ConcurrencyInstrumentedTest.kt:21)
+
+
+Time: 0.31
+There were 2 failures:
+1) delayedEnqueueCannotReplaceNewerRecipeWithItsOldSnapshot(dev.localphoto.enhancer.ConcurrencyInstrumentedTest)
+java.lang.AssertionError: expected:<EnhanceSettings(auto=false, profile=QUALITY, adjustments=Adjustments(scale=4, denoise=0.0, deblur=0.0, sharpen=15.0, detailPreservation=80.0, exposure=0.75, brightness=0.0, contrast=0.0, highlights=0.0, shadows=0.0, whitePoint=0.0, blackPoint=0.0, gamma=1.0, temperature=0.0, tint=0.0, saturation=0.0, vibrance=0.0, hue=0.0, redBalance=0.0, greenBalance=0.0, blueBalance=0.0, fadedColor=0.0), transform=TransformSettings(rotationDegrees=0, flipHorizontal=false, flipVertical=false, straightenDegrees=0.0, cropLeft=0.0, cropTop=0.0, cropRight=1.0, cropBottom=1.0), output=OutputSettings(format=JPEG, quality=97, stripMetadata=true))> but was:<EnhanceSettings(auto=true, profile=QUALITY, adjustments=Adjustments(scale=2, denoise=0.0, deblur=0.0, sharpen=15.0, detailPreservation=80.0, exposure=0.0, brightness=0.0, contrast=0.0, highlights=0.0, shadows=0.0, whitePoint=0.0, blackPoint=0.0, gamma=1.0, temperature=0.0, tint=0.0, saturation=0.0, vibrance=0.0, hue=0.0, redBalance=0.0, greenBalance=0.0, blueBalance=0.0, fadedColor=0.0), transform=TransformSettings(rotationDegrees=0, flipHorizontal=false, flipVertical=false, straightenDegrees=0.0, cropLeft=0.0, cropTop=0.0, cropRight=1.0, cropBottom=1.0), output=OutputSettings(format=JPEG, quality=97, stripMetadata=true))>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:120)
+	at org.junit.Assert.assertEquals(Assert.java:146)
+	at dev.localphoto.enhancer.ConcurrencyInstrumentedTest$delayedEnqueueCannotReplaceNewerRecipeWithItsOldSnapshot$1.invokeSuspend(ConcurrencyInstrumentedTest.kt:54)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:101)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:95)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:69)
+	at kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source:1)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:47)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(Unknown Source:1)
+	at dev.localphoto.enhancer.ConcurrencyInstrumentedTest.delayedEnqueueCannotReplaceNewerRecipeWithItsOldSnapshot(ConcurrencyInstrumentedTest.kt:39)
+2) delayedAutosaveCannotRevertAnAlreadyQueuedProjectToDraft(dev.localphoto.enhancer.ConcurrencyInstrumentedTest)
+java.lang.AssertionError: expected:<QUEUED> but was:<DRAFT>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:120)
+	at org.junit.Assert.assertEquals(Assert.java:146)
+	at dev.localphoto.enhancer.ConcurrencyInstrumentedTest$delayedAutosaveCannotRevertAnAlreadyQueuedProjectToDraft$1.invokeSuspend(ConcurrencyInstrumentedTest.kt:35)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:101)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:95)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:69)
+	at kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source:1)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:47)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(Unknown Source:1)
+	at dev.localphoto.enhancer.ConcurrencyInstrumentedTest.delayedAutosaveCannotRevertAnAlreadyQueuedProjectToDraft(ConcurrencyInstrumentedTest.kt:21)
+
+FAILURES!!!
+Tests run: 2,  Failures: 2
+
+

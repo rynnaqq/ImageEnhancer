@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Local Photo Enhancer</string>
+    <string name="home">Home</string><string name="history">History</string><string name="projects">Projects</string><string name="queue">Queue</string>
+    <string name="settings">Settings</string><string name="back">Back</string><string name="close">Close</string>
+    <string name="add_photos">Add photos</string><string name="browse_files">Browse files</string>
+    <string name="offline_tag">Entirely on your device</string><string name="home_title">A little more life.\nIn every photo.</string>
+    <string name="home_description">Bring back detail, lift the light, and keep every memory close. Your photos stay on your phone.</string>
+    <string name="import_hint">JPG, PNG, WebP, HEIC and BMP</string>
+    <string name="home_private">Private by design</string><string name="home_private_body">No uploads. No accounts. Works in airplane mode.</string>
+    <string name="home_originals">Keep the original</string><string name="home_originals_body">Every enhancement becomes a new photo.</string>
+    <string name="recent_results">Recent work</string><string name="view_all">View all</string>
+    <string name="empty_home">Your next favorite photo starts here.</string><string name="empty_home_body">Add a photo to enhance it, or import a few to build a batch.</string>
+    <string name="empty_history">A home for your finished photos</string><string name="empty_history_body">Completed, cancelled and failed work will appear here.</string>
+    <string name="empty_projects">Keep a memory in progress</string><string name="empty_projects_body">Imported photos and saved edits will appear here.</string>
+    <string name="empty_queue">Nothing in the queue</string><string name="empty_queue_body">Start an enhancement from a photo or a batch.</string>
+    <string name="photo_preview">Photo preview</string><string name="result_preview">Enhanced photo preview</string><string name="preparing">Preparing your photos…</string>
+    <string name="importing">Making a private copy…</string><string name="import_failed">Some photos could not be imported. Valid photos have been kept.</string>
+    <string name="select_mode">How would you like to work?</string><string name="selected_count">%1$d photos selected</string>
+    <string name="batch_title">Enhance a batch</string><string name="batch_description">Give each photo its own enhancement. Review and save results individually.</string>
+    <string name="reference_title">Use as references</string><string name="reference_description">Choose the main photo below. Keep related photos with its project.</string>
+    <string name="reference_dependency">Reference photos are stored locally. Identity-aware fusion needs a verified local model and is unavailable in this build.</string>
+    <string name="primary_photo">Main photo</string><string name="create_reference_project">Create reference project</string>
+    <string name="start_batch">Enhance %1$d photos</string><string name="open_editor">Open editor</string>
+    <string name="editor">Edit photo</string><string name="auto">Auto</string><string name="manual">Manual</string>
+    <string name="auto_title">Let the photo lead</string><string name="auto_description">We check light, noise, color and detail, then choose the adjustments your photo needs.</string>
+    <string name="auto_hint">The plan adapts to your photo. Advanced restoration models are listed below.</string>
+    <string name="enhance">Enhance photo</string><string name="enhance_again">Enhance again</string><string name="save_project">Save project</string>
+    <string name="project_saved">Project edits saved.</string><string name="saved_automatically">Saved to Pictures/LocalPhotoEnhancer</string>
+    <string name="save_copy">Save a new copy</string><string name="edit_again">Edit again</string><string name="share">Share</string><string name="more_actions">More actions</string>
+    <string name="delete_project">Delete project</string><string name="delete_project_body">Remove this project and its private copies? Photos saved in your gallery are kept.</string>
+    <string name="delete_saved_copy">Delete saved gallery copy</string><string name="delete">Delete</string><string name="keep">Keep</string><string name="cancel">Cancel</string>
+    <string name="before">Before</string><string name="after">After</string><string name="compare">Compare</string><string name="comparison_position">Before and after divider</string>
+    <string name="fit">Fit</string><string name="actual_pixels" formatted="false">100% preview</string><string name="zoom_in">Zoom in</string><string name="zoom_out">Zoom out</string>
+    <string name="compare_help">Pinch to zoom. Drag to explore. Slide to compare.</string>
+    <string name="transform">Crop &amp; orientation</string><string name="rotate_left">Rotate left</string><string name="rotate_right">Rotate right</string>
+    <string name="flip_horizontal">Flip horizontally</string><string name="flip_vertical">Flip vertically</string><string name="straighten">Straighten</string>
+    <string name="crop_left">Crop left</string><string name="crop_top">Crop top</string><string name="crop_right">Crop right</string><string name="crop_bottom">Crop bottom</string>
+    <string name="reset">Reset</string><string name="resolution">Resolution</string><string name="dimensions">%1$d × %2$d</string><string name="multiplier">%1$d×</string>
+    <string name="output_dimensions">Requested output: %1$d × %2$d</string><string name="safe_scale">This device can safely process up to %1$d× at this input size. Larger requests will adapt before processing.</string>
+    <string name="source_sampling_warning">This photo needs a smaller working copy on this device. The original stays at full resolution.</string>
+    <string name="sr_description">Bundled AI restores luminance at 3×. Other output sizes use local resampling.</string>
+    <string name="denoise">Noise reduction</string><string name="deblur">Blur reduction</string><string name="sharpen">Sharpening</string><string name="strength">Strength</string>
+    <string name="detail_preservation">Detail preservation</string><string name="conventional_filters">Edge-aware local filters. Dedicated learned denoise and deblur models are a technical dependency.</string>
+    <string name="lighting">Lighting</string><string name="exposure">Exposure</string><string name="brightness">Brightness</string><string name="contrast">Contrast</string>
+    <string name="highlights">Highlights</string><string name="shadows">Shadows</string><string name="white_point">White point</string><string name="black_point">Black point</string><string name="gamma">Gamma</string>
+    <string name="color">Color</string><string name="temperature">Temperature</string><string name="tint">Tint</string><string name="saturation">Saturation</string><string name="vibrance">Vibrance</string>
+    <string name="hue">Hue</string><string name="red_balance">Red balance</string><string name="green_balance">Green balance</string><string name="blue_balance">Blue balance</string><string name="faded_color">Faded color recovery</string>
+    <string name="restoration_tools">Restoration tools</string><string name="model_dependency">Additional local model required</string>
+    <string name="dependency_explanation">These tools need verified, redistributable on-device models and quality tests before they can run. No photo is sent to a server.</string>
+    <string name="old_photo">Old photo, scratch &amp; dust restoration</string><string name="old_photo_dependency">Needs a bundled damage detector and scratch repair model, tiled mask processing and texture preservation tests.</string>
+    <string name="face">Face restoration</string><string name="face_dependency">Needs bundled face detection, alignment and restoration models with identity-preservation validation.</string>
+    <string name="colorization">Black-and-white colorization</string><string name="colorization_dependency">Needs a bundled colorization model with natural-color and portrait quality validation.</string>
+    <string name="reconstruction">Missing-area reconstruction</string><string name="reconstruction_dependency">Needs a bundled inpainting model, editable damage masks and restored-region tracking.</string>
+    <string name="tiff_title">TIFF import</string><string name="tiff_dependency">TIFF needs a bundled decoder. This build supports JPG, PNG, WebP, HEIC and BMP.</string>
+    <string name="not_available">Unavailable in this build</string><string name="reference_count">%1$d reference photos stored with this project</string>
+    <string name="profile">Processing profile</string><string name="quality">Quality</string><string name="balanced">Balanced</string><string name="fast">Fast</string>
+    <string name="profile_description">Quality is the default. Tile size adapts to memory and heat. This build uses one bundled model.</string>
+    <string name="export_settings">Save options</string><string name="format">File format</string><string name="export_quality">Export quality</string><string name="strip_metadata">Remove metadata</string>
+    <string name="strip_metadata_body">Keep camera and location details out of saved photos. Shared copies always have metadata removed.</string>
+    <string name="metadata_note">When kept, only capture date and camera name are copied to JPEG. Location is never copied.</string>
+    <string name="processing_channel">Photo processing</string><string name="enhancing_photos">Enhancing your photos</string><string name="processing_notification">%1$s · %2$d%%</string>
+    <string name="processing_title">A little patience. More detail.</string><string name="processing_slow">Processing may take longer on this device. You can leave the app while the system allows background processing.</string>
+    <string name="cancel_current">Cancel current photo</string><string name="cancel_queue">Cancel queue</string><string name="resume_queue">Resume remaining photos</string><string name="retry">Retry</string>
+    <string name="queue_summary">%1$d complete · %2$d waiting · %3$d paused</string><string name="progress_percent">%1$d%%</string>
+    <string name="status_draft">Draft</string><string name="status_queued">Waiting</string><string name="status_processing">In progress</string><string name="status_completed">Completed</string>
+    <string name="status_cancelled">Cancelled</string><string name="status_failed">Needs attention</string><string name="status_interrupted">Paused</string>
+    <string name="stage_decode">Preparing image</string><string name="stage_analyze">Checking photo condition</string><string name="stage_denoise">Reducing noise</string><string name="stage_deblur">Improving clarity</string>
+    <string name="stage_lighting">Balancing the light</string><string name="stage_color">Refining color</string><string name="stage_super_resolution">Recovering detail</string><string name="stage_refine">Finishing touches</string><string name="stage_export">Saving your result</string>
+    <string name="detected">Photo condition</string><string name="planned">Enhancement plan</string><string name="detected_low_resolution">Low resolution</string><string name="detected_noise">Noise</string><string name="detected_blur">Soft detail</string>
+    <string name="detected_underexposure">Low light</string><string name="detected_overexposure">Bright highlights</string><string name="detected_low_contrast">Low contrast</string><string name="detected_color_cast">Color cast</string>
+    <string name="detected_faded_color">Faded color</string><string name="detected_monochrome">Black and white</string><string name="no_defects">Only a gentle refinement is needed.</string>
+    <string name="error_decode">This photo could not be decoded.</string><string name="error_storage">Not enough storage to create this output.</string>
+    <string name="error_memory">This photo is too large at the requested size on this device. Try a lower multiplier or a smaller crop.</string>
+    <string name="error_model">The local model could not be initialized. Free some space and retry.</string><string name="error_integrity">The bundled model did not pass its integrity check. Reinstall a verified app package.</string>
+    <string name="error_inference">This photo could not be enhanced. Your original is safe. Try a lower size or retry.</string><string name="error_export">The result could not be saved. Check available storage and try again.</string>
+    <string name="error_interrupted">Processing was paused by the system or device temperature. Resume to continue from the last safe stage.</string>
+    <string name="error_service">The system could not start processing. Return to the app and try again.</string>
+    <string name="notice_sampled">A smaller working copy was used to fit this device. The original remains full resolution.</string>
+    <string name="notice_scale">The output multiplier was reduced to fit this device. Actual dimensions are shown above.</string>
+    <string name="notice_sampled_scale">The working copy and output multiplier were reduced to fit this device. The original remains untouched.</string>
+    <string name="notice_gallery_failed">The enhanced result is safe in this project, but gallery saving failed. Tap Save a new copy to retry.</string>
+    <string name="local_engine">Local engine</string><string name="model_storage">AI models require %1$s MB. Available space: %2$s GB.</string>
+    <string name="device_info">Android %1$d · %2$d CPU cores · %3$s MB processing budget</string>
+    <string name="engine_ready">Bundled model ready</string><string name="initialize_engine">Prepare local engine</string>
+    <string name="baseline_notice">This build includes a lightweight super-resolution model. Professional restoration and hardware quality validation are still pending.</string>
+    <string name="licenses">Model licenses &amp; attribution</string><string name="license_body">Bundled ESPCN model: ONNX Model Zoo, Apache 2.0. Local inference: Microsoft ONNX Runtime, MIT. Models are included in the installed application. No runtime download occurs.</string>
+    <string name="privacy_title">Your photos stay yours</string><string name="privacy_body">The app has no Internet permission, account, analytics or cloud processing. Private projects are excluded from backups. Sharing only happens when you choose it.</string>
+    <string name="done">Done</string><string name="select_photo">Select photo</string><string name="batch_position">Photo %1$d of %2$d</string>
+    <string name="error_resume_memory">This job is paused because its saved stage needs more memory. Close other apps and resume, or change the settings to start again.</string>
+</resources>

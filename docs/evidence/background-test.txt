@@ -1,0 +1,29 @@
+
+dev.localphoto.enhancer.BackgroundProcessingInstrumentedTest:
+Process crashed while executing autoEnhancementFinishesInBackgroundAndHistoryCanReeditAfterRecreation(dev.localphoto.enhancer.BackgroundProcessingInstrumentedTest):
+android.app.InvalidForegroundServiceTypeException: Starting FGS with type none callerApp=ProcessRecord{3f4c070 2938:dev.localphoto.enhancer/u0a212} targetSDK=35 has been prohibited
+	at android.app.InvalidForegroundServiceTypeException$1.createFromParcel(InvalidForegroundServiceTypeException.java:53)
+	at android.app.InvalidForegroundServiceTypeException$1.createFromParcel(InvalidForegroundServiceTypeException.java:49)
+	at android.os.Parcel.readParcelableInternal(Parcel.java:5075)
+	at android.os.Parcel.readParcelable(Parcel.java:5057)
+	at android.os.Parcel.createExceptionOrNull(Parcel.java:3237)
+	at android.os.Parcel.createException(Parcel.java:3226)
+	at android.os.Parcel.readException(Parcel.java:3209)
+	at android.os.Parcel.readException(Parcel.java:3151)
+	at android.app.IActivityManager$Stub$Proxy.setServiceForeground(IActivityManager.java:7193)
+	at android.app.Service.startForeground(Service.java:863)
+	at androidx.core.app.ServiceCompat$Api34Impl.startForeground(ServiceCompat.java:237)
+	at androidx.core.app.ServiceCompat.startForeground(ServiceCompat.java:171)
+	at dev.localphoto.enhancer.processing.EnhancementService.onStartCommand(EnhancementService.kt:58)
+	at android.app.ActivityThread.handleServiceArgs(ActivityThread.java:5147)
+	at android.app.ActivityThread.-$$Nest$mhandleServiceArgs(Unknown Source:0)
+	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:2469)
+	at android.os.Handler.dispatchMessage(Handler.java:107)
+	at android.os.Looper.loopOnce(Looper.java:232)
+	at android.os.Looper.loop(Looper.java:317)
+	at android.app.ActivityThread.main(ActivityThread.java:8705)
+	at java.lang.reflect.Method.invoke(Native Method)
+	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:580)
+	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:886)
+INSTRUMENTATION_RESULT: shortMsg=Process crashed.
+INSTRUMENTATION_CODE: 0

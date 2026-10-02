@@ -1,0 +1,7 @@
+
+10-02 07:46:29.642  2307  2782 D LocalPhotoModel: provider=NNAPI steadyInferenceMs=78.0462 input=224x224
+10-02 07:46:36.521  2307  2697 D LocalPhotoModel: provider=CPU steadyInferenceMs=78.6567 input=224x224
+10-02 07:46:37.654  2307  2697 D LocalPhotoModel: provider=CPU steadyInferenceMs=62.2542 input=224x224
+10-02 07:46:38.898  2307  2697 D LocalPhotoModel: provider=CPU steadyInferenceMs=60.5317 input=224x224
+
+

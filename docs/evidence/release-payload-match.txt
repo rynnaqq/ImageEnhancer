@@ -1,0 +1,1 @@
+Verified all 99 original ZIP entries: signed APK code/resources/model bytes match the optimized build. Added entries are signing metadata only: META-INF/IMAGEENH.SF, META-INF/IMAGEENH.RSA, META-INF/MANIFEST.MF.

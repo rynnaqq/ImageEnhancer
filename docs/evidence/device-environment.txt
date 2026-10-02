@@ -1,0 +1,7 @@
+AVD: LocalEnhancer
+Android: 15
+API: 35
+ABI: x86_64
+Airplane mode: 1
+Wi-Fi: 0
+Mobile data setting: 0

@@ -1,0 +1,58 @@
+
+dev.localphoto.enhancer.BackgroundProcessingInstrumentedTest:
+Error in autoEnhancementFinishesInBackgroundAndHistoryCanReeditAfterRecreation(dev.localphoto.enhancer.BackgroundProcessingInstrumentedTest):
+java.lang.AssertionError: Action performScrollTo() failed.
+Reason: Expected exactly '1' node but could not find any node that satisfies: (Text + EditableText contains 'Edit again' (ignoreCase: false))
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchSemanticsNode(SemanticsNodeInteraction.kt:84)
+	at androidx.compose.ui.test.ActionsKt.performScrollTo(Actions.kt:76)
+	at dev.localphoto.enhancer.BackgroundProcessingInstrumentedTest$autoEnhancementFinishesInBackgroundAndHistoryCanReeditAfterRecreation$1.invokeSuspend(BackgroundProcessingInstrumentedTest.kt:80)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.internal.ScopeCoroutine.afterResume(Scopes.kt:28)
+	at kotlinx.coroutines.AbstractCoroutine.resumeWith(AbstractCoroutine.kt:100)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:46)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:99)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:95)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:69)
+	at kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source:1)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:47)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(Unknown Source:1)
+	at dev.localphoto.enhancer.BackgroundProcessingInstrumentedTest.autoEnhancementFinishesInBackgroundAndHistoryCanReeditAfterRecreation(BackgroundProcessingInstrumentedTest.kt:30)
+
+dev.localphoto.enhancer.ConcurrencyInstrumentedTest:.....
+dev.localphoto.enhancer.EngineInstrumentedTest:.....
+dev.localphoto.enhancer.MigrationInstrumentedTest:.
+dev.localphoto.enhancer.ProjectInstrumentedTest:.........
+dev.localphoto.enhancer.UiInstrumentedTest:.
+
+Time: 137.918
+There was 1 failure:
+1) autoEnhancementFinishesInBackgroundAndHistoryCanReeditAfterRecreation(dev.localphoto.enhancer.BackgroundProcessingInstrumentedTest)
+java.lang.AssertionError: Action performScrollTo() failed.
+Reason: Expected exactly '1' node but could not find any node that satisfies: (Text + EditableText contains 'Edit again' (ignoreCase: false))
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchSemanticsNode(SemanticsNodeInteraction.kt:84)
+	at androidx.compose.ui.test.ActionsKt.performScrollTo(Actions.kt:76)
+	at dev.localphoto.enhancer.BackgroundProcessingInstrumentedTest$autoEnhancementFinishesInBackgroundAndHistoryCanReeditAfterRecreation$1.invokeSuspend(BackgroundProcessingInstrumentedTest.kt:80)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.internal.ScopeCoroutine.afterResume(Scopes.kt:28)
+	at kotlinx.coroutines.AbstractCoroutine.resumeWith(AbstractCoroutine.kt:100)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:46)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:99)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:95)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:69)
+	at kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source:1)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:47)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(Unknown Source:1)
+	at dev.localphoto.enhancer.BackgroundProcessingInstrumentedTest.autoEnhancementFinishesInBackgroundAndHistoryCanReeditAfterRecreation(BackgroundProcessingInstrumentedTest.kt:30)
+
+FAILURES!!!
+Tests run: 22,  Failures: 1
+
+

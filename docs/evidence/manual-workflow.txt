@@ -1,0 +1,5 @@
+Host fixture: 9e0d795742dbb4c66f4afc061107fdef34830d9d736c4bee93521d6f61f0be29
+Gallery original: 9e0d795742dbb4c66f4afc061107fdef34830d9d736c4bee93521d6f61f0be29  /sdcard/Pictures/local-enhancer-qa-fixture.png
+Private original: 9e0d795742dbb4c66f4afc061107fdef34830d9d736c4bee93521d6f61f0be29  files/projects/4dab40a1-6209-444d-93ba-fb4c54778884/original.png
+Imported through Android system photo picker; auto-enhanced in airplane mode.
+Source: 320x240 PNG. New gallery result: 640x480 JPEG. Private lossless result retained.

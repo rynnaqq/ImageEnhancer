@@ -1,0 +1,17 @@
+Verifies
+Verified using v1 scheme (JAR signing): false
+Verified using v2 scheme (APK Signature Scheme v2): false
+Verified using v3 scheme (APK Signature Scheme v3): true
+Verified using v3.1 scheme (APK Signature Scheme v3.1): false
+Verified using v4 scheme (APK Signature Scheme v4): false
+Verified for SourceStamp: false
+Number of signers: 1
+Signer #1 certificate DN: CN=ImageEnhancer
+Signer #1 certificate SHA-256 digest: 921853fe2ce9460e7d4304d8f4e146ad045c81b8144e111fc30c50a22da337d0
+Signer #1 certificate SHA-1 digest: 701af682fb5632b384c5037180d72adeb9c421e0
+Signer #1 certificate MD5 digest: cea409175ff2e5dfb16ae160e032fa19
+Signer #1 key algorithm: RSA
+Signer #1 key size (bits): 4096
+Signer #1 public key SHA-256 digest: b6678b70f98e93724436ab73b29d2e49ee6999a5ca6417b29eb277b8c869dc45
+Signer #1 public key SHA-1 digest: b64fba31d97a3c34f2c1fd81c2f1e2324d8c0c54
+Signer #1 public key MD5 digest: 9cfb68c40cc26fa664038c13fb9cc359

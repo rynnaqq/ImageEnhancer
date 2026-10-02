@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "models": [
+    {
+      "id": "espcn-x3",
+      "file": "espcn-x3.onnx",
+      "version": "ONNX Model Zoo super-resolution-10 / opset 10",
+      "source": "https://huggingface.co/onnxmodelzoo/super-resolution-10",
+      "upstream": "https://github.com/onnx/models/tree/main/validated/vision/super_resolution/sub_pixel_cnn_2016",
+      "license": "Apache-2.0",
+      "licenseAsset": "licenses/ONNX-MODEL-ZOO-APACHE-2.0.txt",
+      "sha256": "85f36ff88cc504a24af5e0602148bc56a8aa09a58eca8c0da2756f3e8186035e",
+      "bytes": 240078,
+      "input": "float32 NCHW [1,1,224,224], YCbCr luminance normalized to 0..1; smaller tiles are centered reflection-padded without resizing",
+      "output": "float32 NCHW [1,1,672,672], 3x luminance; padding is cropped and chroma is locally resampled",
+      "backends": ["CPU", "XNNPACK", "NNAPI when model/device probe succeeds"],
+      "workingMemoryEstimateBytes": 33554432,
+      "qualityStatus": "Working lightweight baseline; professional restoration quality is not validated",
+      "outputScaling": "Learned 3x luminance followed by local resampling to requested 2x, 4x or 8x"
+    }
+  ]
+}

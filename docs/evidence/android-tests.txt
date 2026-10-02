@@ -1,0 +1,13 @@
+
+dev.localphoto.enhancer.BackgroundProcessingInstrumentedTest:.
+dev.localphoto.enhancer.ConcurrencyInstrumentedTest:.....
+dev.localphoto.enhancer.EngineInstrumentedTest:.....
+dev.localphoto.enhancer.MigrationInstrumentedTest:.
+dev.localphoto.enhancer.ProjectInstrumentedTest:.........
+dev.localphoto.enhancer.UiInstrumentedTest:.
+
+Time: 40.617
+
+OK (22 tests)
+
+

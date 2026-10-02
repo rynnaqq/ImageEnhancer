@@ -1,0 +1,7 @@
+Signed R8 release APK: native system photo picker -> Auto -> enhancement -> background/return -> completed result and before/after comparison.
+Original source: 320x240 PNG. New output: 640x480 JPEG.
+Row: 4 _id=1000000048, _display_name=1000000047_enhanced_20261002_084727_538_aba83153.jpg, width=640, height=480, relative_path=Pictures/LocalPhotoEnhancer/
+9e0d795742dbb4c66f4afc061107fdef34830d9d736c4bee93521d6f61f0be29  /sdcard/Pictures/release-qa-fixture.png
+airplane_mode_on=1
+wifi_on=0
+mobile_data=0

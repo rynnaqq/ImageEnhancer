@@ -1,0 +1,12 @@
+﻿
+
+Algorithm : SHA256
+Hash      : 0A4F6F15AF5713D04D62FE6B7431EE605C89943FEAEB362FD025C1117718D3DD
+Path      : C:\Users\M S I\Documents\imageenhancer\app\build\outputs\apk\debug\app-debug.apk
+
+Algorithm : SHA256
+Hash      : 650450C77724E2EC6B395F62B11B793ED4B22F922A3FB0FE5D1EDCB7E81B19C6
+Path      : C:\Users\M S I\Documents\imageenhancer\app\build\outputs\apk\release\app-release-unsigned.apk
+
+
+

@@ -1,0 +1,7 @@
+Signed release installed successfully.
+ab1f3e3f5cd3fc3a78d99126ec508249e30b62065511827fe54acebfa8acc781  /data/app/~~KNbmcVBfX3tTSB7gvo4Y-A==/dev.localphoto.enhancer-hkosb4XuYpLBWJaH7Phh8A==/base.apk
+    versionCode=1 minSdk=29 targetSdk=35
+    versionName=0.1.0
+    flags=[ HAS_CODE ALLOW_CLEAR_USER_DATA ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PARTIALLY_DIRECT_BOOT_AWARE PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    pkgFlags=[ HAS_CODE ALLOW_CLEAR_USER_DATA ]

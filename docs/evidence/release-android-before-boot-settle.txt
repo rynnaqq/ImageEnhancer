@@ -1,0 +1,4 @@
+INSTRUMENTATION_RESULT: shortMsg=Process crashed.
+INSTRUMENTATION_CODE: 0
+
+Initial cold-boot attempt terminated before test execution with an application startup ANR. Logs also showed ANRs in System UI and unrelated Google apps. The 8 GiB host had 349,160 KiB free physical memory and the emulator enforced 2560 MiB guest RAM. After startup settled and the System UI Wait dialog was dismissed, the full unchanged 22-test suite passed in 186.122 seconds (release-android-regression.txt).

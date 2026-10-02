@@ -1,0 +1,10 @@
+Verified bundled model: espcn-x3 SHA-256 85f36ff88cc504a24af5e0602148bc56a8aa09a58eca8c0da2756f3e8186035e
+APK audit passed: models and licenses bundled; no network permissions.
+package: dev.localphoto.enhancer
+uses-permission: name='android.permission.FOREGROUND_SERVICE'
+uses-permission: name='android.permission.FOREGROUND_SERVICE_MEDIA_PROCESSING'
+uses-permission: name='android.permission.FOREGROUND_SERVICE_DATA_SYNC'
+uses-permission: name='android.permission.POST_NOTIFICATIONS'
+uses-permission: name='android.permission.WAKE_LOCK'
+permission: dev.localphoto.enhancer.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+uses-permission: name='dev.localphoto.enhancer.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION'
